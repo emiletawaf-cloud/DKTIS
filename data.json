@@ -69,7 +69,7 @@
       "shared": [
         {
           "id": "nov-other",
-          "label": "Water Hose",
+          "label": "Hose",
           "amount": 1200,
           "paidBy": "tawaf",
           "split": [],
@@ -864,5 +864,5 @@
       "elevator": 0
     }
   },
-  "savedAt": 1794489066936
+  "savedAt": 1794489089918
 }
