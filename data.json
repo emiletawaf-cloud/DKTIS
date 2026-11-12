@@ -30,11 +30,8 @@
     "collector": "tawaf",
     "tamerInStairs": true,
     "elevatorDefault": 550,
-    "opening": {
-      "nathalie": -1467.02,
-      "tamer": -1750
-    },
-    "openingNote": "Balance as of 8 Nov 2026"
+    "opening": {},
+    "openingNote": "Balances start at zero in January 2026"
   },
   "months": {
     "2026-11": {
@@ -63,7 +60,785 @@
       "shared": [],
       "stairs": 0,
       "tamerOwn": 2000
+    },
+    "2026-01": {
+      "id": "2026-01",
+      "legacy": {
+        "n": 4,
+        "items": [
+          {
+            "label": "Elevator",
+            "amount": 500.0,
+            "cat": "elev"
+          },
+          {
+            "label": "Other",
+            "amount": 200.0,
+            "cat": "other"
+          }
+        ],
+        "apts": {
+          "kozman": {
+            "elec": 0.0,
+            "ev": 0,
+            "gas": 25.0
+          },
+          "tawaf": {
+            "elec": 0.0,
+            "ev": 0,
+            "gas": 25.0
+          },
+          "nathalie": {
+            "elec": 0.0,
+            "ev": 0,
+            "gas": 25.0
+          },
+          "fadi": {
+            "elec": 0.0,
+            "ev": 0,
+            "gas": 25.0
+          }
+        }
+      },
+      "adjustments": [
+        {
+          "id": "x2026-01kozman",
+          "apt": "kozman",
+          "type": "credit",
+          "amount": 4151.0,
+          "note": "Paid on behalf of the building"
+        },
+        {
+          "id": "p2026-01nathalie",
+          "apt": "nathalie",
+          "type": "payment",
+          "amount": 200.0,
+          "note": "Paid January"
+        },
+        {
+          "id": "x2026-01fadi",
+          "apt": "fadi",
+          "type": "credit",
+          "amount": 500.0,
+          "note": "Paid on behalf of the building"
+        }
+      ],
+      "note": "",
+      "meters": {},
+      "gas": {},
+      "shared": [],
+      "elevator": 0
+    },
+    "2026-02": {
+      "id": "2026-02",
+      "legacy": {
+        "n": 4,
+        "items": [
+          {
+            "label": "Elevator",
+            "amount": 500.0,
+            "cat": "elev"
+          },
+          {
+            "label": "Soap",
+            "amount": 200.0,
+            "cat": "other"
+          }
+        ],
+        "apts": {
+          "kozman": {
+            "elec": 1672.25,
+            "ev": 0,
+            "gas": 25.0
+          },
+          "tawaf": {
+            "elec": 2913.25,
+            "ev": 0,
+            "gas": 25.0
+          },
+          "nathalie": {
+            "elec": 653.25,
+            "ev": 0,
+            "gas": 25.0
+          },
+          "fadi": {
+            "elec": 978.25,
+            "ev": 0,
+            "gas": 25.0
+          }
+        }
+      },
+      "adjustments": [
+        {
+          "id": "x2026-02kozman",
+          "apt": "kozman",
+          "type": "charge",
+          "amount": 1808.0,
+          "note": "Balance adjustment"
+        },
+        {
+          "id": "p2026-02nathalie",
+          "apt": "nathalie",
+          "type": "payment",
+          "amount": 853.25,
+          "note": "Paid February"
+        },
+        {
+          "id": "x2026-02fadi",
+          "apt": "fadi",
+          "type": "credit",
+          "amount": 200.0,
+          "note": "Paid on behalf of the building"
+        },
+        {
+          "id": "p2026-02fadi",
+          "apt": "fadi",
+          "type": "payment",
+          "amount": 678.25,
+          "note": "Paid February"
+        }
+      ],
+      "note": "",
+      "meters": {},
+      "gas": {},
+      "shared": [],
+      "elevator": 0
+    },
+    "2026-03": {
+      "id": "2026-03",
+      "legacy": {
+        "n": 4,
+        "items": [
+          {
+            "label": "Elevator",
+            "amount": 500.0,
+            "cat": "elev"
+          },
+          {
+            "label": "Water",
+            "amount": 900.0,
+            "cat": "water"
+          }
+        ],
+        "apts": {
+          "kozman": {
+            "elec": 1759.25,
+            "ev": 0,
+            "gas": 25.0
+          },
+          "tawaf": {
+            "elec": 3063.25,
+            "ev": 0,
+            "gas": 25.0
+          },
+          "nathalie": {
+            "elec": 803.25,
+            "ev": 0,
+            "gas": 25.0
+          },
+          "fadi": {
+            "elec": 1128.25,
+            "ev": 0,
+            "gas": 25.0
+          }
+        }
+      },
+      "adjustments": [
+        {
+          "id": "p2026-03kozman",
+          "apt": "kozman",
+          "type": "payment",
+          "amount": 1863.5,
+          "note": "Paid March"
+        },
+        {
+          "id": "p2026-03nathalie",
+          "apt": "nathalie",
+          "type": "payment",
+          "amount": 1178.25,
+          "note": "Paid March"
+        },
+        {
+          "id": "x2026-03fadi",
+          "apt": "fadi",
+          "type": "credit",
+          "amount": 500.0,
+          "note": "Paid on behalf of the building"
+        },
+        {
+          "id": "p2026-03fadi",
+          "apt": "fadi",
+          "type": "payment",
+          "amount": 1003.25,
+          "note": "Paid March"
+        }
+      ],
+      "note": "",
+      "meters": {},
+      "gas": {},
+      "shared": [],
+      "elevator": 0
+    },
+    "2026-04": {
+      "id": "2026-04",
+      "legacy": {
+        "n": 4,
+        "items": [
+          {
+            "label": "Elevator",
+            "amount": 550.0,
+            "cat": "elev"
+          },
+          {
+            "label": "Water",
+            "amount": 1555.0,
+            "cat": "water"
+          }
+        ],
+        "apts": {
+          "kozman": {
+            "elec": 2136.25,
+            "ev": 0,
+            "gas": 25.0
+          },
+          "tawaf": {
+            "elec": 3687.25,
+            "ev": 0,
+            "gas": 25.0
+          },
+          "nathalie": {
+            "elec": 850.25,
+            "ev": 0,
+            "gas": 25.0
+          },
+          "fadi": {
+            "elec": 1420.25,
+            "ev": 0,
+            "gas": 25.0
+          }
+        }
+      },
+      "adjustments": [
+        {
+          "id": "x2026-04kozman",
+          "apt": "kozman",
+          "type": "credit",
+          "amount": 100.0,
+          "note": "Paid on behalf of the building"
+        },
+        {
+          "id": "p2026-04kozman",
+          "apt": "kozman",
+          "type": "payment",
+          "amount": 2587.5,
+          "note": "Paid April"
+        },
+        {
+          "id": "p2026-04nathalie",
+          "apt": "nathalie",
+          "type": "payment",
+          "amount": 1401.5,
+          "note": "Paid April"
+        },
+        {
+          "id": "x2026-04fadi",
+          "apt": "fadi",
+          "type": "credit",
+          "amount": 550.0,
+          "note": "Paid on behalf of the building"
+        },
+        {
+          "id": "p2026-04fadi",
+          "apt": "fadi",
+          "type": "payment",
+          "amount": 1421.5,
+          "note": "Paid April"
+        }
+      ],
+      "note": "",
+      "meters": {},
+      "gas": {},
+      "shared": [],
+      "elevator": 0
+    },
+    "2026-05": {
+      "id": "2026-05",
+      "legacy": {
+        "n": 5,
+        "items": [
+          {
+            "label": "Elevator",
+            "amount": 550.0,
+            "cat": "elev"
+          },
+          {
+            "label": "Bathroom",
+            "amount": 2375.0,
+            "cat": "other"
+          },
+          {
+            "label": "Other",
+            "amount": 200.0,
+            "cat": "other"
+          }
+        ],
+        "apts": {
+          "kozman": {
+            "elec": 1993.062,
+            "ev": 0,
+            "gas": 162.0
+          },
+          "tawaf": {
+            "elec": 4553.062,
+            "ev": 400.0,
+            "gas": 18.0
+          },
+          "nathalie": {
+            "elec": 1275.062,
+            "ev": 0,
+            "gas": 17.0
+          },
+          "fadi": {
+            "elec": 1556.062,
+            "ev": 0,
+            "gas": 59.0
+          },
+          "tamer": {
+            "elec": 249.062,
+            "ev": 0,
+            "gas": 48.0
+          }
+        }
+      },
+      "adjustments": [
+        {
+          "id": "p2026-05kozman",
+          "apt": "kozman",
+          "type": "payment",
+          "amount": 2780.062,
+          "note": "Paid May"
+        },
+        {
+          "id": "p2026-05nathalie",
+          "apt": "nathalie",
+          "type": "payment",
+          "amount": 1917.062,
+          "note": "Paid May"
+        },
+        {
+          "id": "x2026-05fadi",
+          "apt": "fadi",
+          "type": "credit",
+          "amount": 550.0,
+          "note": "Paid on behalf of the building"
+        },
+        {
+          "id": "p2026-05fadi",
+          "apt": "fadi",
+          "type": "payment",
+          "amount": 1690.062,
+          "note": "Paid May"
+        },
+        {
+          "id": "x2026-05tamer",
+          "apt": "tamer",
+          "type": "payment",
+          "amount": 10000.0,
+          "note": "Advance payment"
+        }
+      ],
+      "note": "",
+      "meters": {},
+      "gas": {},
+      "shared": [],
+      "elevator": 0
+    },
+    "2026-06": {
+      "id": "2026-06",
+      "legacy": {
+        "n": 5,
+        "items": [
+          {
+            "label": "Elevator",
+            "amount": 1080.0,
+            "cat": "elev"
+          },
+          {
+            "label": "Soap",
+            "amount": 200.0,
+            "cat": "other"
+          },
+          {
+            "label": "Other",
+            "amount": 520.0,
+            "cat": "other"
+          }
+        ],
+        "apts": {
+          "kozman": {
+            "elec": 957.8,
+            "ev": 0,
+            "gas": 42.0
+          },
+          "tawaf": {
+            "elec": 950.8,
+            "ev": 400.0,
+            "gas": 30.0
+          },
+          "nathalie": {
+            "elec": 417.8,
+            "ev": 0,
+            "gas": 106.0
+          },
+          "fadi": {
+            "elec": 675.8,
+            "ev": 0,
+            "gas": 17.0
+          },
+          "tamer": {
+            "elec": 401.8,
+            "ev": 0,
+            "gas": 0.0
+          }
+        }
+      },
+      "adjustments": [
+        {
+          "id": "x2026-06kozman",
+          "apt": "kozman",
+          "type": "credit",
+          "amount": 520.0,
+          "note": "Paid on behalf of the building"
+        },
+        {
+          "id": "p2026-06kozman",
+          "apt": "kozman",
+          "type": "payment",
+          "amount": 839.8,
+          "note": "Paid June"
+        },
+        {
+          "id": "p2026-06nathalie",
+          "apt": "nathalie",
+          "type": "payment",
+          "amount": 883.8,
+          "note": "Paid June"
+        },
+        {
+          "id": "x2026-06fadi",
+          "apt": "fadi",
+          "type": "credit",
+          "amount": 1080.0,
+          "note": "Paid on behalf of the building"
+        }
+      ],
+      "note": "",
+      "meters": {},
+      "gas": {},
+      "shared": [],
+      "elevator": 0
+    },
+    "2026-07": {
+      "id": "2026-07",
+      "legacy": {
+        "n": 5,
+        "items": [
+          {
+            "label": "Elevator",
+            "amount": 550.0,
+            "cat": "elev"
+          },
+          {
+            "label": "Water",
+            "amount": 1250.0,
+            "cat": "water"
+          }
+        ],
+        "apts": {
+          "kozman": {
+            "elec": 3202.25,
+            "ev": 0,
+            "gas": 35.0
+          },
+          "tawaf": {
+            "elec": 1962.25,
+            "ev": 0,
+            "gas": 18.0
+          },
+          "nathalie": {
+            "elec": 567.25,
+            "ev": 0,
+            "gas": 29.0
+          },
+          "fadi": {
+            "elec": 1765.25,
+            "ev": 0,
+            "gas": 18.0
+          },
+          "tamer": {
+            "elec": 601.8,
+            "ev": 0,
+            "gas": 18.0
+          }
+        }
+      },
+      "adjustments": [
+        {
+          "id": "p2026-07kozman",
+          "apt": "kozman",
+          "type": "payment",
+          "amount": 3597.25,
+          "note": "Paid July"
+        },
+        {
+          "id": "p2026-07nathalie",
+          "apt": "nathalie",
+          "type": "payment",
+          "amount": 956.25,
+          "note": "Paid July"
+        },
+        {
+          "id": "x2026-07fadi",
+          "apt": "fadi",
+          "type": "credit",
+          "amount": 522.8,
+          "note": "Paid on behalf of the building"
+        },
+        {
+          "id": "p2026-07fadi",
+          "apt": "fadi",
+          "type": "payment",
+          "amount": 1593.25,
+          "note": "Paid July"
+        }
+      ],
+      "note": "",
+      "meters": {},
+      "gas": {},
+      "shared": [],
+      "elevator": 0
+    },
+    "2026-08": {
+      "id": "2026-08",
+      "legacy": {
+        "n": 5,
+        "items": [
+          {
+            "label": "Elevator",
+            "amount": 5050.0,
+            "cat": "elev"
+          },
+          {
+            "label": "Other",
+            "amount": 200.0,
+            "cat": "other"
+          }
+        ],
+        "apts": {
+          "kozman": {
+            "elec": 3369.8,
+            "ev": 0,
+            "gas": 18.0
+          },
+          "tawaf": {
+            "elec": 4910.55,
+            "ev": 0,
+            "gas": 17.0
+          },
+          "nathalie": {
+            "elec": 1440.8,
+            "ev": 0,
+            "gas": 30.0
+          },
+          "fadi": {
+            "elec": 2141.8,
+            "ev": 0,
+            "gas": 17.0
+          },
+          "tamer": {
+            "elec": 1271.15,
+            "ev": 0,
+            "gas": 17.0
+          }
+        }
+      },
+      "adjustments": [
+        {
+          "id": "p2026-08kozman",
+          "apt": "kozman",
+          "type": "payment",
+          "amount": 4437.8,
+          "note": "Paid August"
+        },
+        {
+          "id": "x2026-08nathalie",
+          "apt": "nathalie",
+          "type": "credit",
+          "amount": 2000.0,
+          "note": "Paid on behalf of the building"
+        },
+        {
+          "id": "p2026-08nathalie",
+          "apt": "nathalie",
+          "type": "payment",
+          "amount": 520.8,
+          "note": "Paid August"
+        },
+        {
+          "id": "x2026-08fadi",
+          "apt": "fadi",
+          "type": "credit",
+          "amount": 6396.75,
+          "note": "Paid on behalf of the building"
+        }
+      ],
+      "note": "",
+      "meters": {},
+      "gas": {},
+      "shared": [],
+      "elevator": 0
+    },
+    "2026-09": {
+      "id": "2026-09",
+      "legacy": {
+        "n": 5,
+        "items": [
+          {
+            "label": "Elevator",
+            "amount": 550.0,
+            "cat": "elev"
+          }
+        ],
+        "apts": {
+          "kozman": {
+            "elec": 834.2,
+            "ev": 0,
+            "gas": 42.0
+          },
+          "tawaf": {
+            "elec": 2741.2,
+            "ev": 0,
+            "gas": 17.0
+          },
+          "nathalie": {
+            "elec": 1849.2,
+            "ev": 0,
+            "gas": 106.0
+          },
+          "fadi": {
+            "elec": 1894.2,
+            "ev": 0,
+            "gas": 30.0
+          },
+          "tamer": {
+            "elec": 1308.2,
+            "ev": 0,
+            "gas": 17.0
+          }
+        }
+      },
+      "adjustments": [
+        {
+          "id": "p2026-09kozman",
+          "apt": "kozman",
+          "type": "payment",
+          "amount": 986.2,
+          "note": "Paid September"
+        },
+        {
+          "id": "p2026-09nathalie",
+          "apt": "nathalie",
+          "type": "payment",
+          "amount": 2065.2,
+          "note": "Paid September"
+        },
+        {
+          "id": "x2026-09fadi",
+          "apt": "fadi",
+          "type": "credit",
+          "amount": 516.0,
+          "note": "Paid on behalf of the building"
+        }
+      ],
+      "note": "",
+      "meters": {},
+      "gas": {},
+      "shared": [],
+      "elevator": 0
+    },
+    "2026-10": {
+      "id": "2026-10",
+      "legacy": {
+        "n": 5,
+        "items": [
+          {
+            "label": "Elevator",
+            "amount": 550.0,
+            "cat": "elev"
+          },
+          {
+            "label": "Water",
+            "amount": 3473.0,
+            "cat": "water"
+          }
+        ],
+        "apts": {
+          "kozman": {
+            "elec": 2847.0,
+            "ev": 0,
+            "gas": 0.0
+          },
+          "tawaf": {
+            "elec": 3486.0,
+            "ev": 500.0,
+            "gas": 0.0
+          },
+          "nathalie": {
+            "elec": 1789.0,
+            "ev": 0,
+            "gas": 0.0
+          },
+          "fadi": {
+            "elec": 3193.0,
+            "ev": 0,
+            "gas": 0.0
+          },
+          "tamer": {
+            "elec": 1008.0,
+            "ev": 0,
+            "gas": 0.0
+          }
+        }
+      },
+      "adjustments": [
+        {
+          "id": "p2026-10kozman",
+          "apt": "kozman",
+          "type": "payment",
+          "amount": 3651.6,
+          "note": "Paid October"
+        },
+        {
+          "id": "x2026-10nathalie",
+          "apt": "nathalie",
+          "type": "credit",
+          "amount": 4060.62,
+          "note": "Paid on behalf of the building"
+        },
+        {
+          "id": "p2026-10fadi",
+          "apt": "fadi",
+          "type": "payment",
+          "amount": 2327.85,
+          "note": "Paid October"
+        }
+      ],
+      "note": "",
+      "meters": {},
+      "gas": {},
+      "shared": [],
+      "elevator": 0
     }
   },
-  "savedAt": 1794483061372
+  "savedAt": 1794485856254
 }
