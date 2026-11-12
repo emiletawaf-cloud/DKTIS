@@ -59,7 +59,13 @@
       "other": 30,
       "shared": [],
       "stairs": 0,
-      "tamerOwn": 2000
+      "tamerOwn": 2000,
+      "openingOverride": {
+        "kozman": 0,
+        "nathalie": -1467.02,
+        "fadi": 0,
+        "tamer": -1750
+      }
     },
     "2026-01": {
       "id": "2026-01",
@@ -840,5 +846,5 @@
       "elevator": 0
     }
   },
-  "savedAt": 1794485856254
+  "savedAt": 1794486790417
 }
