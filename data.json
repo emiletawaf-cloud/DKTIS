@@ -49,6 +49,13 @@
           "type": "payment",
           "amount": 137.98,
           "note": "Paid November 2026"
+        },
+        {
+          "id": "kowjoxb",
+          "apt": "kozman",
+          "type": "payment",
+          "amount": 4113,
+          "note": "Paid November 2026"
         }
       ],
       "elevator": 550,
@@ -871,5 +878,5 @@
       "elevator": 0
     }
   },
-  "savedAt": 1794491251390
+  "savedAt": 1794492220686
 }
