@@ -69,7 +69,7 @@
       "shared": [
         {
           "id": "nov-other",
-          "label": "Other",
+          "label": "Water Hose",
           "amount": 1200,
           "paidBy": "tawaf",
           "split": [],
@@ -92,35 +92,35 @@
         "items": [
           {
             "label": "Elevator",
-            "amount": 500.0,
+            "amount": 500,
             "cat": "elev"
           },
           {
             "label": "Other",
-            "amount": 200.0,
+            "amount": 200,
             "cat": "other"
           }
         ],
         "apts": {
           "kozman": {
-            "elec": 0.0,
+            "elec": 0,
             "ev": 0,
-            "gas": 25.0
+            "gas": 25
           },
           "tawaf": {
-            "elec": 0.0,
+            "elec": 0,
             "ev": 0,
-            "gas": 25.0
+            "gas": 25
           },
           "nathalie": {
-            "elec": 0.0,
+            "elec": 0,
             "ev": 0,
-            "gas": 25.0
+            "gas": 25
           },
           "fadi": {
-            "elec": 0.0,
+            "elec": 0,
             "ev": 0,
-            "gas": 25.0
+            "gas": 25
           }
         }
       },
@@ -129,21 +129,21 @@
           "id": "x2026-01kozman",
           "apt": "kozman",
           "type": "credit",
-          "amount": 4151.0,
+          "amount": 4151,
           "note": "Paid on behalf of the building"
         },
         {
           "id": "p2026-01nathalie",
           "apt": "nathalie",
           "type": "payment",
-          "amount": 200.0,
+          "amount": 200,
           "note": "Paid January"
         },
         {
           "id": "x2026-01fadi",
           "apt": "fadi",
           "type": "credit",
-          "amount": 500.0,
+          "amount": 500,
           "note": "Paid on behalf of the building"
         }
       ],
@@ -160,12 +160,12 @@
         "items": [
           {
             "label": "Elevator",
-            "amount": 500.0,
+            "amount": 500,
             "cat": "elev"
           },
           {
             "label": "Soap",
-            "amount": 200.0,
+            "amount": 200,
             "cat": "other"
           }
         ],
@@ -173,22 +173,22 @@
           "kozman": {
             "elec": 1672.25,
             "ev": 0,
-            "gas": 25.0
+            "gas": 25
           },
           "tawaf": {
             "elec": 2913.25,
             "ev": 0,
-            "gas": 25.0
+            "gas": 25
           },
           "nathalie": {
             "elec": 653.25,
             "ev": 0,
-            "gas": 25.0
+            "gas": 25
           },
           "fadi": {
             "elec": 978.25,
             "ev": 0,
-            "gas": 25.0
+            "gas": 25
           }
         }
       },
@@ -197,7 +197,7 @@
           "id": "x2026-02kozman",
           "apt": "kozman",
           "type": "charge",
-          "amount": 1808.0,
+          "amount": 1808,
           "note": "Balance adjustment"
         },
         {
@@ -211,7 +211,7 @@
           "id": "x2026-02fadi",
           "apt": "fadi",
           "type": "credit",
-          "amount": 200.0,
+          "amount": 200,
           "note": "Paid on behalf of the building"
         },
         {
@@ -235,12 +235,12 @@
         "items": [
           {
             "label": "Elevator",
-            "amount": 500.0,
+            "amount": 500,
             "cat": "elev"
           },
           {
             "label": "Water",
-            "amount": 900.0,
+            "amount": 900,
             "cat": "water"
           }
         ],
@@ -248,22 +248,22 @@
           "kozman": {
             "elec": 1759.25,
             "ev": 0,
-            "gas": 25.0
+            "gas": 25
           },
           "tawaf": {
             "elec": 3063.25,
             "ev": 0,
-            "gas": 25.0
+            "gas": 25
           },
           "nathalie": {
             "elec": 803.25,
             "ev": 0,
-            "gas": 25.0
+            "gas": 25
           },
           "fadi": {
             "elec": 1128.25,
             "ev": 0,
-            "gas": 25.0
+            "gas": 25
           }
         }
       },
@@ -286,7 +286,7 @@
           "id": "x2026-03fadi",
           "apt": "fadi",
           "type": "credit",
-          "amount": 500.0,
+          "amount": 500,
           "note": "Paid on behalf of the building"
         },
         {
@@ -310,12 +310,12 @@
         "items": [
           {
             "label": "Elevator",
-            "amount": 550.0,
+            "amount": 550,
             "cat": "elev"
           },
           {
             "label": "Water",
-            "amount": 1555.0,
+            "amount": 1555,
             "cat": "water"
           }
         ],
@@ -323,22 +323,22 @@
           "kozman": {
             "elec": 2136.25,
             "ev": 0,
-            "gas": 25.0
+            "gas": 25
           },
           "tawaf": {
             "elec": 3687.25,
             "ev": 0,
-            "gas": 25.0
+            "gas": 25
           },
           "nathalie": {
             "elec": 850.25,
             "ev": 0,
-            "gas": 25.0
+            "gas": 25
           },
           "fadi": {
             "elec": 1420.25,
             "ev": 0,
-            "gas": 25.0
+            "gas": 25
           }
         }
       },
@@ -347,7 +347,7 @@
           "id": "x2026-04kozman",
           "apt": "kozman",
           "type": "credit",
-          "amount": 100.0,
+          "amount": 100,
           "note": "Paid on behalf of the building"
         },
         {
@@ -368,7 +368,7 @@
           "id": "x2026-04fadi",
           "apt": "fadi",
           "type": "credit",
-          "amount": 550.0,
+          "amount": 550,
           "note": "Paid on behalf of the building"
         },
         {
@@ -392,17 +392,17 @@
         "items": [
           {
             "label": "Elevator",
-            "amount": 550.0,
+            "amount": 550,
             "cat": "elev"
           },
           {
             "label": "Bathroom",
-            "amount": 2375.0,
+            "amount": 2375,
             "cat": "other"
           },
           {
             "label": "Other",
-            "amount": 200.0,
+            "amount": 200,
             "cat": "other"
           }
         ],
@@ -410,27 +410,27 @@
           "kozman": {
             "elec": 1993.062,
             "ev": 0,
-            "gas": 162.0
+            "gas": 162
           },
           "tawaf": {
             "elec": 4553.062,
-            "ev": 400.0,
-            "gas": 18.0
+            "ev": 400,
+            "gas": 18
           },
           "nathalie": {
             "elec": 1275.062,
             "ev": 0,
-            "gas": 17.0
+            "gas": 17
           },
           "fadi": {
             "elec": 1556.062,
             "ev": 0,
-            "gas": 59.0
+            "gas": 59
           },
           "tamer": {
             "elec": 249.062,
             "ev": 0,
-            "gas": 48.0
+            "gas": 48
           }
         }
       },
@@ -453,7 +453,7 @@
           "id": "x2026-05fadi",
           "apt": "fadi",
           "type": "credit",
-          "amount": 550.0,
+          "amount": 550,
           "note": "Paid on behalf of the building"
         },
         {
@@ -467,7 +467,7 @@
           "id": "x2026-05tamer",
           "apt": "tamer",
           "type": "payment",
-          "amount": 10000.0,
+          "amount": 10000,
           "note": "Advance payment"
         }
       ],
@@ -484,17 +484,17 @@
         "items": [
           {
             "label": "Elevator",
-            "amount": 1080.0,
+            "amount": 1080,
             "cat": "elev"
           },
           {
             "label": "Soap",
-            "amount": 200.0,
+            "amount": 200,
             "cat": "other"
           },
           {
             "label": "Other",
-            "amount": 520.0,
+            "amount": 520,
             "cat": "other"
           }
         ],
@@ -502,27 +502,27 @@
           "kozman": {
             "elec": 957.8,
             "ev": 0,
-            "gas": 42.0
+            "gas": 42
           },
           "tawaf": {
             "elec": 950.8,
-            "ev": 400.0,
-            "gas": 30.0
+            "ev": 400,
+            "gas": 30
           },
           "nathalie": {
             "elec": 417.8,
             "ev": 0,
-            "gas": 106.0
+            "gas": 106
           },
           "fadi": {
             "elec": 675.8,
             "ev": 0,
-            "gas": 17.0
+            "gas": 17
           },
           "tamer": {
             "elec": 401.8,
             "ev": 0,
-            "gas": 0.0
+            "gas": 0
           }
         }
       },
@@ -531,7 +531,7 @@
           "id": "x2026-06kozman",
           "apt": "kozman",
           "type": "credit",
-          "amount": 520.0,
+          "amount": 520,
           "note": "Paid on behalf of the building"
         },
         {
@@ -552,7 +552,7 @@
           "id": "x2026-06fadi",
           "apt": "fadi",
           "type": "credit",
-          "amount": 1080.0,
+          "amount": 1080,
           "note": "Paid on behalf of the building"
         }
       ],
@@ -569,12 +569,12 @@
         "items": [
           {
             "label": "Elevator",
-            "amount": 550.0,
+            "amount": 550,
             "cat": "elev"
           },
           {
             "label": "Water",
-            "amount": 1250.0,
+            "amount": 1250,
             "cat": "water"
           }
         ],
@@ -582,27 +582,27 @@
           "kozman": {
             "elec": 3202.25,
             "ev": 0,
-            "gas": 35.0
+            "gas": 35
           },
           "tawaf": {
             "elec": 1962.25,
             "ev": 0,
-            "gas": 18.0
+            "gas": 18
           },
           "nathalie": {
             "elec": 567.25,
             "ev": 0,
-            "gas": 29.0
+            "gas": 29
           },
           "fadi": {
             "elec": 1765.25,
             "ev": 0,
-            "gas": 18.0
+            "gas": 18
           },
           "tamer": {
             "elec": 601.8,
             "ev": 0,
-            "gas": 18.0
+            "gas": 18
           }
         }
       },
@@ -649,12 +649,12 @@
         "items": [
           {
             "label": "Elevator",
-            "amount": 5050.0,
+            "amount": 5050,
             "cat": "elev"
           },
           {
             "label": "Other",
-            "amount": 200.0,
+            "amount": 200,
             "cat": "other"
           }
         ],
@@ -662,27 +662,27 @@
           "kozman": {
             "elec": 3369.8,
             "ev": 0,
-            "gas": 18.0
+            "gas": 18
           },
           "tawaf": {
             "elec": 4910.55,
             "ev": 0,
-            "gas": 17.0
+            "gas": 17
           },
           "nathalie": {
             "elec": 1440.8,
             "ev": 0,
-            "gas": 30.0
+            "gas": 30
           },
           "fadi": {
             "elec": 2141.8,
             "ev": 0,
-            "gas": 17.0
+            "gas": 17
           },
           "tamer": {
             "elec": 1271.15,
             "ev": 0,
-            "gas": 17.0
+            "gas": 17
           }
         }
       },
@@ -698,7 +698,7 @@
           "id": "x2026-08nathalie",
           "apt": "nathalie",
           "type": "credit",
-          "amount": 2000.0,
+          "amount": 2000,
           "note": "Paid on behalf of the building"
         },
         {
@@ -729,7 +729,7 @@
         "items": [
           {
             "label": "Elevator",
-            "amount": 550.0,
+            "amount": 550,
             "cat": "elev"
           }
         ],
@@ -737,27 +737,27 @@
           "kozman": {
             "elec": 834.2,
             "ev": 0,
-            "gas": 42.0
+            "gas": 42
           },
           "tawaf": {
             "elec": 2741.2,
             "ev": 0,
-            "gas": 17.0
+            "gas": 17
           },
           "nathalie": {
             "elec": 1849.2,
             "ev": 0,
-            "gas": 106.0
+            "gas": 106
           },
           "fadi": {
             "elec": 1894.2,
             "ev": 0,
-            "gas": 30.0
+            "gas": 30
           },
           "tamer": {
             "elec": 1308.2,
             "ev": 0,
-            "gas": 17.0
+            "gas": 17
           }
         }
       },
@@ -780,7 +780,7 @@
           "id": "x2026-09fadi",
           "apt": "fadi",
           "type": "credit",
-          "amount": 516.0,
+          "amount": 516,
           "note": "Paid on behalf of the building"
         }
       ],
@@ -797,40 +797,40 @@
         "items": [
           {
             "label": "Elevator",
-            "amount": 550.0,
+            "amount": 550,
             "cat": "elev"
           },
           {
             "label": "Water",
-            "amount": 3473.0,
+            "amount": 3473,
             "cat": "water"
           }
         ],
         "apts": {
           "kozman": {
-            "elec": 2847.0,
+            "elec": 2847,
             "ev": 0,
-            "gas": 0.0
+            "gas": 0
           },
           "tawaf": {
-            "elec": 3486.0,
-            "ev": 500.0,
-            "gas": 0.0
+            "elec": 3486,
+            "ev": 500,
+            "gas": 0
           },
           "nathalie": {
-            "elec": 1789.0,
+            "elec": 1789,
             "ev": 0,
-            "gas": 0.0
+            "gas": 0
           },
           "fadi": {
-            "elec": 3193.0,
+            "elec": 3193,
             "ev": 0,
-            "gas": 0.0
+            "gas": 0
           },
           "tamer": {
-            "elec": 1008.0,
+            "elec": 1008,
             "ev": 0,
-            "gas": 0.0
+            "gas": 0
           }
         }
       },
@@ -864,5 +864,5 @@
       "elevator": 0
     }
   },
-  "savedAt": 1794487762217
+  "savedAt": 1794489066936
 }
