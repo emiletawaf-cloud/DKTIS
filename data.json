@@ -35,18 +35,27 @@
   },
   "months": {
     "2026-11": {
-      "adjustments": [],
+      "adjustments": [
+        {
+          "id": "nov-koz",
+          "apt": "kozman",
+          "type": "credit",
+          "amount": 500,
+          "note": "Paid on behalf of the building"
+        }
+      ],
       "elevator": 550,
       "ev": {
         "kozman": 0,
         "tawaf": 600
       },
-      "garage": 2500,
+      "garage": 3040,
       "gas": {
         "kozman": 35,
+        "tawaf": 35,
         "nathalie": 35,
-        "tamer": 35,
-        "tawaf": 35
+        "fadi": 35,
+        "tamer": 35
       },
       "id": "2026-11",
       "meters": {
@@ -57,14 +66,23 @@
       },
       "note": "",
       "other": 30,
-      "shared": [],
+      "shared": [
+        {
+          "id": "nov-other",
+          "label": "Other",
+          "amount": 1200,
+          "paidBy": "tawaf",
+          "split": [],
+          "private": false
+        }
+      ],
       "stairs": 0,
       "tamerOwn": 2000,
       "openingOverride": {
         "kozman": 0,
         "nathalie": -1467.02,
         "fadi": 0,
-        "tamer": -1750
+        "tamer": -1750.388
       }
     },
     "2026-01": {
@@ -846,5 +864,5 @@
       "elevator": 0
     }
   },
-  "savedAt": 1794486790417
+  "savedAt": 1794487762217
 }
