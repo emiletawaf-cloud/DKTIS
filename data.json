@@ -42,13 +42,6 @@
           "type": "credit",
           "amount": 500,
           "note": "Sandra paid for Garage"
-        },
-        {
-          "id": "l1oti98",
-          "apt": "nathalie",
-          "type": "payment",
-          "amount": 137.98,
-          "note": "Paid November 2026"
         }
       ],
       "elevator": 550,
@@ -871,5 +864,5 @@
       "elevator": 0
     }
   },
-  "savedAt": 1794491160408
+  "savedAt": 1794491245347
 }
