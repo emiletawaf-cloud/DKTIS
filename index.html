@@ -1,0 +1,616 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>DKTIS Building Bills</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: one narrow ledger column; editor inputs on top, the residents' statement below it. Meter-panel feel: stone neutrals, deep teal accent, ochre for amounts owed. */
+:root{
+  --bg:#EEF1EF; --surface:#FFFFFF; --sunk:#E3E8E5; --line:#CBD3CE;
+  --ink:#16201C; --muted:#5A6862; --accent:#0E6B58; --accent-ink:#FFFFFF;
+  --owe:#A4600B; --owe-bg:#F6EBD8; --credit:#0E6B58; --credit-bg:#DCEEE8; --danger:#A33A2B;
+  --f-display:"Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
+  --f-body:"IBM Plex Sans", "Segoe UI", system-ui, sans-serif;
+  --f-mono:"IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+  --r:10px;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#111715; --surface:#19211E; --sunk:#0D1210; --line:#2C3833;
+  --ink:#E4ECE8; --muted:#94A39C; --accent:#3FB79A; --accent-ink:#06120E;
+  --owe:#E2A447; --owe-bg:#33270F; --credit:#4CC5A6; --credit-bg:#11302A; --danger:#E07A69; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#111715; --surface:#19211E; --sunk:#0D1210; --line:#2C3833;
+  --ink:#E4ECE8; --muted:#94A39C; --accent:#3FB79A; --accent-ink:#06120E;
+  --owe:#E2A447; --owe-bg:#33270F; --credit:#4CC5A6; --credit-bg:#11302A; --danger:#E07A69; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:15px;line-height:1.5}
+.wrap{max-width:880px;margin:0 auto;padding-block:28px 64px;padding-left:max(16px, env(safe-area-inset-left, 0px));padding-right:max(16px, env(safe-area-inset-right, 0px));display:flex;flex-direction:column;gap:22px}
+h1,h2,h3{font-family:var(--f-display);text-wrap:balance;margin:0;line-height:1.15}
+h1{font-size:30px;font-weight:700;letter-spacing:-.01em}
+h2{font-size:19px;font-weight:600}
+h3{font-size:15px;font-weight:600}
+.eyebrow{font-size:11.5px;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);font-weight:600}
+.muted{color:var(--muted)}
+.num{font-family:var(--f-mono);font-variant-numeric:tabular-nums}
+header.top{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:14px}
+.bar{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+select,input,textarea,button{font:inherit;color:inherit}
+select,input[type=text],input[type=number],textarea{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:7px 10px;min-width:0}
+input[type=number]{font-family:var(--f-mono);text-align:right}
+textarea{width:100%;min-height:64px;resize:vertical}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+button{cursor:pointer;border-radius:8px;border:1px solid var(--line);background:var(--surface);padding:7px 12px;font-weight:500}
+button:hover{border-color:var(--accent)}
+button.primary{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+button.ghost{background:transparent;border-color:transparent;color:var(--muted);padding:4px 8px}
+button.ghost:hover{color:var(--danger)}
+button:disabled{opacity:.5;cursor:default}
+.pill{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:600;padding:3px 10px;border-radius:999px;background:var(--sunk);color:var(--muted)}
+.pill.live{background:var(--credit-bg);color:var(--credit)}
+.pill.warn{background:var(--owe-bg);color:var(--owe)}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:18px;display:flex;flex-direction:column;gap:14px}
+.panel-head{display:flex;justify-content:space-between;align-items:baseline;gap:10px;flex-wrap:wrap}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px}
+.field{display:flex;flex-direction:column;gap:4px;min-width:0}
+.field label{font-size:12.5px;color:var(--muted)}
+.field label b{color:var(--ink);font-weight:600}
+.rows{display:flex;flex-direction:column;gap:10px}
+.row{display:grid;gap:8px;align-items:center;padding:10px;border-radius:8px;background:var(--sunk)}
+.row.exp{grid-template-columns:minmax(120px,2fr) minmax(90px,1fr) minmax(110px,1fr) auto}
+.row.adj{grid-template-columns:minmax(100px,1fr) minmax(120px,1.2fr) minmax(90px,1fr) minmax(120px,2fr) auto}
+.row .sub{grid-column:1/-1;display:flex;flex-wrap:wrap;gap:6px;align-items:center;font-size:12.5px;color:var(--muted)}
+.chip{border-radius:999px;padding:2px 10px;font-size:12px;border:1px solid var(--line);background:var(--surface);color:var(--muted)}
+.chip.on{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.check{display:inline-flex;align-items:center;gap:6px;margin-left:auto}
+.empty{font-size:13.5px;color:var(--muted);padding:6px 2px}
+details.settings summary{cursor:pointer;font-family:var(--f-display);font-weight:600;font-size:17px}
+details.settings[open] summary{margin-bottom:12px}
+/* statement */
+.stmt{display:flex;flex-direction:column;gap:14px}
+.bills{display:flex;flex-wrap:wrap;gap:6px 18px;font-size:13px;color:var(--muted)}
+.bills span b{color:var(--ink);font-family:var(--f-mono);font-weight:500}
+.note{background:var(--sunk);border-radius:8px;padding:10px 12px;white-space:pre-wrap}
+.apt{border:1px solid var(--line);border-radius:var(--r);background:var(--surface);overflow:hidden}
+.apt > summary{list-style:none;cursor:pointer;display:grid;grid-template-columns:1fr auto;gap:4px 12px;align-items:center;padding:14px 16px}
+.apt > summary::-webkit-details-marker{display:none}
+.apt .name{font-family:var(--f-display);font-weight:600;font-size:18px}
+.apt .meta{font-size:12.5px;color:var(--muted)}
+.apt .due{text-align:right}
+.apt .due .amt{font-family:var(--f-mono);font-size:20px;font-weight:500}
+.apt.owe .due .amt{color:var(--owe)}
+.apt.credit .due .amt{color:var(--credit)}
+.apt .due .tag{font-size:11.5px;letter-spacing:.06em;text-transform:uppercase;font-weight:600;color:var(--muted)}
+.apt.owe{border-left:4px solid var(--owe)}
+.apt.credit{border-left:4px solid var(--credit)}
+.apt.zero{border-left:4px solid var(--line)}
+.lines{border-top:1px solid var(--line);padding:10px 16px 14px;display:flex;flex-direction:column}
+.ln{display:grid;grid-template-columns:1fr auto;gap:2px 12px;padding:6px 0;border-bottom:1px dashed var(--line)}
+.ln:last-child{border-bottom:0}
+.ln .d{font-size:12px;color:var(--muted);grid-column:1/2}
+.ln .v{font-family:var(--f-mono);text-align:right}
+.ln.minus .v{color:var(--credit)}
+.ln.tot{font-weight:600;border-bottom:0;border-top:1px solid var(--ink);margin-top:4px;padding-top:8px}
+.ln.sec{border-bottom:0;padding:10px 0 2px}
+.ln.sec .l{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:600}
+.apt-actions{display:flex;gap:8px;justify-content:flex-end;padding-top:10px}
+.toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(20px + env(safe-area-inset-bottom, 0px));background:var(--ink);color:var(--bg);padding:9px 16px;border-radius:999px;font-size:13.5px;z-index:20}
+.notice{border:1px dashed var(--line);border-radius:var(--r);padding:22px;text-align:center;color:var(--muted)}
+[hidden]{display:none!important}
+.ov,.det{display:flex;flex-direction:column;gap:14px}
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:12px}
+.card{display:grid;grid-template-columns:1fr auto;gap:2px 10px;text-align:left;padding:14px 16px;border-radius:var(--r);border:1px solid var(--line);border-left:5px solid var(--line);background:var(--surface);font-weight:400}
+.card.owe{border-left-color:var(--owe)} .card.credit{border-left-color:var(--credit)}
+.card:hover{border-color:var(--accent)} .card.owe:hover{border-left-color:var(--owe)} .card.credit:hover{border-left-color:var(--credit)}
+.cname{font-family:var(--f-display);font-weight:600;font-size:18px}
+.ctag{font-size:11px;letter-spacing:.07em;text-transform:uppercase;font-weight:600;color:var(--muted);align-self:center;text-align:right}
+.camt{grid-column:1/-1;font-family:var(--f-mono);font-variant-numeric:tabular-nums;font-size:22px;font-weight:500}
+.card.owe .camt{color:var(--owe)} .card.credit .camt{color:var(--credit)}
+.cmeta{font-size:12.5px;color:var(--muted)} .cgo{font-size:12.5px;color:var(--accent);font-weight:600;text-align:right}
+.back{align-self:flex-start;background:transparent;border-color:transparent;padding:4px 0;color:var(--accent);font-weight:600}
+.dhead{display:flex;justify-content:space-between;align-items:flex-end;gap:12px;flex-wrap:wrap;padding-bottom:12px;border-bottom:3px solid var(--line)}
+.dhead.owe{border-bottom-color:var(--owe)} .dhead.credit{border-bottom-color:var(--credit)}
+.dhead h2{font-size:26px}
+.dhead .due{text-align:right} .dhead .tag{font-size:11.5px;letter-spacing:.06em;text-transform:uppercase;font-weight:600;color:var(--muted)}
+.dhead .amt{font-family:var(--f-mono);font-size:26px;font-weight:500} .dhead.owe .amt{color:var(--owe)} .dhead.credit .amt{color:var(--credit)}
+.det .lines{border-top:0;padding:0}
+.foot{display:flex;justify-content:space-between;align-items:center;font-size:12px;color:var(--muted);padding-top:12px}
+.hush{background:transparent;border:0;color:var(--line);padding:2px 8px;font-size:16px;line-height:1}
+.hush:hover{color:var(--muted)}
+@media (max-width:620px){
+  .row.exp,.row.adj{grid-template-columns:1fr 1fr}
+  .row.exp > :first-child,.row.adj > :nth-child(4){grid-column:1/-1}
+  h1{font-size:25px}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+body{margin:0}
+</style>
+</head><body>
+
+<div class="wrap">
+  <header class="top">
+    <div>
+      <div class="eyebrow">DKTIS building · monthly split</div>
+      <h1>Building Bills</h1>
+    </div>
+    <div class="bar" id="topbar"></div>
+  </header>
+  <main id="app" class="stmt"><div class="notice">Loading the building statements…</div></main>
+</div>
+<div class="toast" id="toast" hidden></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script>
+(function(){
+const APTS_DEFAULT=[
+  {id:"kozman",name:"Kozman",meter:"47500"},
+  {id:"tawaf",name:"Tawaf",meter:"47000"},
+  {id:"nathalie",name:"Nathalie",meter:"48500"},
+  {id:"fadi",name:"Fadi",meter:"48000"},
+  {id:"tamer",name:"Tamer",meter:"46000 · stairs"}
+];
+const DEFAULT_CFG={apartments:APTS_DEFAULT,collector:"tawaf",tamerInStairs:true,elevatorDefault:550,opening:{},openingNote:"Starting balance"};
+const ADJ_TYPES={credit:"Credit (paid for the building)",payment:"Payment received",charge:"Extra charge"};
+const MONTHS=["January","February","March","April","May","June","July","August","September","October","November","December"];
+
+const $=s=>document.querySelector(s);
+const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const r2=n=>Math.round((+n||0)*100)/100;
+const fmt=n=>r2(n).toLocaleString("en-US",{minimumFractionDigits:2,maximumFractionDigits:2});
+const uid=()=>Math.random().toString(36).slice(2,9);
+const monthLabel=id=>{const [y,m]=id.split("-");return MONTHS[+m-1]+" "+y};
+const nextMonthId=id=>{let [y,m]=id.split("-").map(Number);m++;if(m>12){m=1;y++}return y+"-"+String(m).padStart(2,"0")};
+function toast(t){const el=$("#toast");el.textContent=t;el.hidden=false;clearTimeout(toast.t);toast.t=setTimeout(()=>el.hidden=true,2200)}
+
+/* ---------- local storage (this browser, this computer) ---------- */
+const KEY="dktis-bills-v1", BKEY="dktis-bills-lastbackup";
+const db=true, isEditor=true;
+const downloads={save:async({filename,data})=>{
+  const blob=new Blob([data],{type:filename.endsWith(".json")?"application/json":filename.endsWith(".pdf")?"application/pdf":"text/html"});
+  const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download=filename;document.body.appendChild(a);a.click();
+  setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},1500);return {status:"saved"}}};
+let remoteAt=0, draftAt=0, remoteOk=false;
+function store(at){try{localStorage.setItem(KEY,JSON.stringify({settings:cfg,months,savedAt:at}))}catch(e){toast("Couldn't keep your changes in this browser. Download data.json now.")}}
+function persist(){draftAt=Date.now();store(draftAt);const p=$("#syncPill");if(p){p.className="pill warn";p.textContent="Changes not uploaded yet"}}
+function lastBackupText(){let t=null;try{t=+localStorage.getItem(BKEY)}catch(e){}
+  if(!t) return {txt:"No backup file saved yet",old:true};
+  const d=Math.floor((Date.now()-t)/86400000);return {txt:"Last backup file: "+(d<1?"today":d===1?"yesterday":d+" days ago"),old:d>30}}
+let cfg=null,months={},cur=null,view="stmt",openApt=null;
+let dirty=false,saving=false,saveTimer=null,lastSaved="";
+
+/* ---------- calculation ---------- */
+function emptyMonth(id){return {id,meters:{},gas:{},other:0,stairs:0,garage:0,elevator:cfg?cfg.elevatorDefault:550,shared:[],adjustments:[],note:""}}
+
+function compute(m,opening){
+  const A=cfg.apartments, n=A.length, col=cfg.collector;
+  const S=r2(m.stairs), G=r2(m.garage), O=r2(m.other), E=r2(m.elevator), EX=r2(m.elevatorExtra);
+  const T=r2(m.tamerOwn), ev=m.ev||{}, evK=r2(ev.kozman), evT=r2(ev.tawaf), evTot=r2(evK+evT);
+  const tIn=cfg.tamerInStairs!==false;
+  const sRest=r2(Math.max(0,S-(tIn?T:0))), gRest=r2(Math.max(0,G-evTot));
+  const per={};
+  A.forEach(a=>per[a.id]={id:a.id,name:a.name,meter:a.meter,collector:a.id===col,charges:[],credits:[],opening:r2(opening[a.id]||0)});
+  const add=(id,label,amt,detail,cat,short)=>{if(Math.abs(r2(amt))>0.004)per[id].charges.push({label,amt:r2(amt),detail:detail||"",cat:cat||"other",short:short||label})};
+  const isWater=x=>/water|مياه|مية|ميه/i.test(x.label||"");
+  A.forEach(a=>{ if(a.id!=="tamer"||m.meters[a.id]) add(a.id,"Apartment meter"+(a.meter?" ("+a.meter.split(" ")[0]+")":""),m.meters[a.id]||0,"","elec","your meter")});
+  if(T&&per.tamer) add("tamer","Own electricity",T,tIn&&S?"Paid by Tamer only; taken out of the "+fmt(S)+" stairs meter bill":"Paid by Tamer only","elec","your own bill");
+  if(sRest) A.forEach(a=>add(a.id,"Stairs meter, 1/"+n,sRest/n,(tIn&&T?fmt(S)+" − "+fmt(T)+" Tamer = "+fmt(sRest):fmt(sRest))+" ÷ "+n,"elec","stairs share"));
+  if(evK&&per.kozman) add("kozman","Electric car charging",evK,"Taken out of the "+fmt(G)+" garage bill","ev");
+  if(evT&&per.tawaf) add("tawaf","Electric car charging",evT,"Taken out of the "+fmt(G)+" garage bill","ev");
+  if(gRest) A.forEach(a=>add(a.id,"Garage meter, 1/"+n,gRest/n,(evTot?fmt(G)+" − "+fmt(evTot)+" car charging = "+fmt(gRest):fmt(gRest))+" ÷ "+n,"elec","garage share"));
+  if(O) A.forEach(a=>add(a.id,"Other meter (49000), 1/"+n,O/n,fmt(O)+" ÷ "+n,"elec","other meter share"));
+  if(E) A.forEach(a=>add(a.id,"Elevator service, 1/"+n,E/n,fmt(E)+" ÷ "+n,"elev","service"));
+  if(EX) A.forEach(a=>add(a.id,"Elevator additional fee, 1/"+n,EX/n,fmt(EX)+" ÷ "+n,"elev","additional fee"));
+  const WB=r2(m.water); if(WB) A.forEach(a=>add(a.id,"Water, 1/"+n,WB/n,fmt(WB)+" ÷ "+n,"water","water bill"));
+  A.forEach(a=>{if(m.gas[a.id]) add(a.id,"Gas",m.gas[a.id],"","gas")});
+  const privAgg={};
+  (m.shared||[]).forEach(s=>{
+    const amt=r2(s.amount); if(!amt) return;
+    const split=(s.split&&s.split.length?s.split:A.map(a=>a.id)).filter(id=>per[id]);
+    if(!split.length) return;
+    const k=split.length, share=amt/k;
+    split.forEach(id=>{
+      if(isWater(s)) add(id,"Water"+(k>1?", 1/"+k:""),share,fmt(amt)+(k>1?" ÷ "+k:""),"water","water");
+      else if(s.private){privAgg[id]=(privAgg[id]||0)+share}
+      else add(id,(s.label||"Shared expense")+(k>1?", 1/"+k:""),share,fmt(amt)+(k>1?" ÷ "+k+(k<n?" ("+split.map(x=>per[x].name).join(", ")+")":""):""),"other");
+    });
+    if(s.paidBy&&s.paidBy!==col&&per[s.paidBy]) per[s.paidBy].credits.push({label:"Paid: "+(isWater(s)?"water bill":"building expense"),amt,kind:"credit",detail:"Full amount, paid on behalf of the building"});
+  });
+  Object.keys(privAgg).forEach(id=>add(id,"Other building expenses",privAgg[id],"Small items, combined"));
+  (m.adjustments||[]).forEach(x=>{
+    if(!per[x.apt]||!r2(x.amount)) return;
+    if(x.type==="charge") add(x.apt,x.note||"Extra charge",x.amount,"","other");
+    else per[x.apt].credits.push({label:x.note||ADJ_TYPES[x.type],amt:r2(x.amount),kind:x.type,detail:x.type==="payment"?"Payment received":""});
+  });
+  const rows=A.map(a=>{
+    const p=per[a.id];
+    p.chargeTotal=r2(p.charges.reduce((t,c)=>t+c.amt,0));
+    p.creditTotal=r2(p.credits.filter(c=>c.kind!=="payment").reduce((t,c)=>t+c.amt,0));
+    p.paidTotal=r2(p.credits.filter(c=>c.kind==="payment").reduce((t,c)=>t+c.amt,0));
+    p.closing=p.collector?0:r2(p.opening+p.chargeTotal-p.creditTotal-p.paidTotal);
+    return p;
+  });
+  const sh=m.shared||[], mt=A.reduce((t,a)=>t+r2(m.meters[a.id]),0);
+  const bills={elec:r2(mt+S+G+O+(tIn?0:T)),ev:evTot,elevator:r2(E+EX),
+    water:r2(WB+sh.filter(isWater).reduce((t,x)=>t+r2(x.amount),0)),
+    gas:r2(A.reduce((t,a)=>t+r2(m.gas[a.id]),0)),
+    others:r2(sh.filter(x=>!isWater(x)).reduce((t,x)=>t+r2(x.amount),0))};
+  return {id:m.id,label:monthLabel(m.id),note:m.note||"",rows,bills,collectorName:per[col]?per[col].name:"",total:r2(rows.reduce((t,r)=>t+r.chargeTotal,0))};
+}
+function openingFor(id){
+  const ids=Object.keys(months).sort(); let bal={...(cfg.opening||{})};
+  for(const mid of ids){
+    if(mid===id) return bal;
+    const s=compute(months[mid],bal); bal={}; s.rows.forEach(r=>{if(!r.collector)bal[r.id]=r.closing});
+  }
+  return bal;
+}
+
+/* ---------- statement render (shared) ---------- */
+function statusOf(r){ if(r.collector) return {cls:"zero",tag:"Collector",amt:fmt(r.chargeTotal)+" share"};
+  if(r.closing>0.004) return {cls:"owe",tag:"Owes",amt:fmt(r.closing)};
+  if(r.closing<-0.004) return {cls:"credit",tag:"Credit carried",amt:fmt(-r.closing)};
+  return {cls:"zero",tag:r.paidTotal?"Paid":"Settled",amt:"0.00"};}
+const CATS=[["elec","Electricity"],["ev","Electric car charging"],["gas","Gas"],["elev","Elevator"],["water","Water"],["other","Others"]];
+function grouped(r){
+  return CATS.map(([k,l])=>{const cs=r.charges.filter(c=>(c.cat||"other")===k);if(!cs.length)return null;
+    const amt=r2(cs.reduce((t,c)=>t+c.amt,0));
+    const detail=k==="other"?"":cs.length===1?cs[0].detail:cs.map(c=>c.short+" "+fmt(c.amt)).join(" + ");
+    return {label:l,amt,detail}}).filter(Boolean);
+}
+function billsList(b){const l=[];
+  if(b.elec)l.push(["Electricity (all meters)",b.elec]);if(b.ev)l.push(["of which electric car charging",b.ev]);
+  if(b.elevator)l.push(["Elevator",b.elevator]);if(b.water)l.push(["Water",b.water]);if(b.gas)l.push(["Gas",b.gas]);if(b.others)l.push(["Others",b.others]);return l}
+function cardsHTML(s){
+  return `<div class="cards">${s.rows.map(r=>{const st=statusOf(r);return `<button class="card ${st.cls}" data-open="${r.id}">
+    <span class="cname">${esc(r.name)}</span><span class="ctag">${st.tag}</span><span class="camt">${st.amt}</span>
+    <span class="cmeta">${r.collector?"Pays the bills":"This month "+fmt(r.chargeTotal)}</span><span class="cgo">Details →</span></button>`}).join("")}</div>`;
+}
+function detailHTML(s,r,opts){
+  const st=statusOf(r);
+  let h=`<section class="det" data-det="${r.id}"${opts.open===r.id?"":" hidden"}>
+    <button class="back" data-back="1">← All apartments</button>
+    <div class="dhead ${st.cls}"><div><div class="eyebrow">${esc(s.label)} · EGP</div><h2>${esc(r.name)}</h2>${r.meter&&!r.collector?`<div class="muted" style="font-size:13px">Meter ${esc(r.meter)}</div>`:""}</div>
+    <div class="due"><div class="tag">${st.tag}</div><div class="amt">${st.amt}</div></div></div><div class="lines">`;
+  if(!r.collector&&r.opening) h+=`<div class="ln${r.opening<0?" minus":""}"><span class="l">${r.opening<0?"Credit brought forward":"Balance brought forward"}</span><span class="v">${r.opening<0?"−"+fmt(-r.opening):fmt(r.opening)}</span></div>`;
+  h+=`<div class="ln sec"><span class="l">This month</span></div>`;
+  if(!r.charges.length) h+=`<div class="ln"><span class="l muted">No charges yet</span><span class="v">0.00</span></div>`;
+  grouped(r).forEach(c=>h+=`<div class="ln"><span class="l">${esc(c.label)}</span><span class="v">${fmt(c.amt)}</span>${c.detail?`<span class="d">${esc(c.detail)}</span>`:""}</div>`);
+  if(r.credits.length){h+=`<div class="ln sec"><span class="l">Credits and payments</span></div>`;
+    r.credits.forEach(c=>h+=`<div class="ln minus"><span class="l">${esc(c.label)}</span><span class="v">−${fmt(c.amt)}</span>${c.detail?`<span class="d">${esc(c.detail)}</span>`:""}</div>`);}
+  if(!r.collector) h+=`<div class="ln tot"><span class="l">${r.closing<-0.004?"Credit remaining":"Amount due"}</span><span class="v">${fmt(Math.abs(r.closing))}</span></div>`;
+  else h+=`<div class="ln tot"><span class="l">${esc(r.name)}'s own share</span><span class="v">${fmt(r.chargeTotal)}</span></div>`;
+  if(opts.editor&&!r.collector&&r.closing>0.004) h+=`<div class="apt-actions"><button data-paid="${r.id}" data-amt="${r.closing}">Mark ${fmt(r.closing)} as paid</button></div>`;
+  return h+`</div></section>`;
+}
+function stmtHTML(s,opts){
+  opts=opts||{};
+  const b=s.bills;
+  let h=`<section class="ov"${opts.open?" hidden":""}><div class="panel-head"><div><div class="eyebrow">Statement · EGP</div><h2>${esc(s.label)}</h2></div>
+    <div class="muted" style="font-size:13px">Tap an apartment for the breakdown</div></div>`;
+  if(s.note) h+=`<div class="note">${esc(s.note)}</div>`;
+  h+=cardsHTML(s);
+  h+=`<div class="bills"><span class="eyebrow" style="flex-basis:100%">Bills this month</span>${billsList(b).map(([l,v])=>`<span>${esc(l)} <b>${fmt(v)}</b></span>`).join("")}</div></section>`;
+  s.rows.forEach(r=>h+=detailHTML(s,r,opts));
+  return h;
+}
+const NAV_JS=`document.addEventListener("click",function(e){var o=e.target.closest("[data-open]"),b=e.target.closest("[data-back]");if(!o&&!b)return;var id=o?o.getAttribute("data-open"):null;document.querySelectorAll(".det").forEach(function(d){d.hidden=d.getAttribute("data-det")!==id});document.querySelector(".ov").hidden=!!id;window.scrollTo(0,0)});`;
+function waText(s){
+  let t=`*DKTIS building — ${s.label}*\n`;
+  s.rows.filter(r=>!r.collector).forEach(r=>{const st=statusOf(r);t+=`${r.name}: ${st.cls==="owe"?st.amt+" EGP due":st.cls==="credit"?"credit "+st.amt+" EGP":"settled"}\n`});
+  const bl=billsList(s.bills);if(bl.length)t+=`\nBills: `+bl.map(([l,v])=>l.toLowerCase()+" "+fmt(v)).join(", ")+`.`;
+  if(s.note) t+=`\n${s.note}`;
+  return t;
+}
+function standaloneHTML(s){
+  const css=document.querySelector("style").textContent;
+  return `<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>DKTIS ${esc(s.label)}</title><style>${css}</style></head><body><div class="wrap"><header class="top"><div><div class="eyebrow">DKTIS building · monthly split</div><h1>Building Bills</h1></div></header><section class="stmt">${stmtHTML(s)}</section><p class="muted" style="font-size:12px">Prepared ${new Date().toLocaleDateString("en-GB",{day:"numeric",month:"short",year:"numeric"})}</p></div><script>${NAV_JS}<\/script></body></html>`;
+}
+
+
+/* ---------- PDF export ---------- */
+function pdfStatement(s){
+  const {jsPDF}=window.jspdf;
+  const doc=new jsPDF({unit:"mm",format:"a4"});
+  const W=210,H=297,M=18,R=W-M;
+  const C={ink:[22,32,28],muted:[90,104,98],line:[203,211,206],accent:[14,107,88],owe:[164,96,11],credit:[14,107,88],soft:[238,241,239]};
+  const T=t=>String(t??"").replace(/−/g,"-").replace(/→/g,"->").replace(/[‘’]/g,"'").replace(/[^\x00-\xFF—]/g,"");
+  const col=c=>doc.setTextColor(...c), fill=c=>doc.setFillColor(...c), draw=c=>doc.setDrawColor(...c);
+  const today=new Date().toLocaleDateString("en-GB",{day:"numeric",month:"short",year:"numeric"});
+  let pageNo=0;
+  function header(sub){
+    pageNo++;
+    fill(C.accent);doc.rect(0,0,W,4,"F");
+    doc.setFont("helvetica","bold");doc.setFontSize(8.5);col(C.muted);
+    doc.text("DKTIS BUILDING  ·  MONTHLY SPLIT  ·  EGP",M,14);
+    doc.setFont("helvetica","normal");doc.text(T(s.label)+"  ·  page "+pageNo,R,14,{align:"right"});
+    doc.setFont("helvetica","bold");doc.setFontSize(22);col(C.ink);doc.text(T(sub),M,26);
+    return 34;
+  }
+  function footer(){doc.setFont("helvetica","normal");doc.setFontSize(8);col(C.muted);doc.text("Prepared "+today,M,H-10);}
+  const statusColor=st=>st.cls==="owe"?C.owe:st.cls==="credit"?C.credit:C.muted;
+
+  /* summary page */
+  let y=header("Building Bills, "+s.label);
+  if(s.note){doc.setFont("helvetica","normal");doc.setFontSize(10);const ls=doc.splitTextToSize(T(s.note),R-M-8);
+    fill(C.soft);doc.roundedRect(M,y,R-M,ls.length*5+6,2,2,"F");col(C.ink);doc.text(ls,M+4,y+6);y+=ls.length*5+12;}
+  const cx=[M,M+70,M+98,M+124,R];
+  doc.setFont("helvetica","bold");doc.setFontSize(8.5);col(C.muted);
+  doc.text("APARTMENT",cx[0],y);doc.text("THIS MONTH",cx[1],y,{align:"right"});doc.text("BROUGHT FWD",cx[2],y,{align:"right"});
+  doc.text("CREDITS / PAID",cx[3],y,{align:"right"});doc.text("STATUS",cx[4],y,{align:"right"});
+  y+=3;draw(C.ink);doc.setLineWidth(.4);doc.line(M,y,R,y);y+=8;
+  s.rows.forEach(r=>{
+    const st=statusOf(r);
+    doc.setFont("helvetica","bold");doc.setFontSize(12);col(C.ink);doc.text(T(r.name),cx[0],y);
+    doc.setFont("helvetica","normal");doc.setFontSize(10.5);
+    doc.text(fmt(r.chargeTotal),cx[1],y,{align:"right"});
+    col(r.opening<0?C.credit:C.ink);doc.text(r.collector||!r.opening?"-":(r.opening<0?"-"+fmt(-r.opening):fmt(r.opening)),cx[2],y,{align:"right"});
+    const cp=r.creditTotal+r.paidTotal;col(cp?C.credit:C.ink);doc.text(r.collector||!cp?"-":"-"+fmt(cp),cx[3],y,{align:"right"});
+    doc.setFont("helvetica","bold");doc.setFontSize(11.5);col(statusColor(st));
+    doc.text(r.collector?"Collector":T(st.tag)+" "+st.amt,cx[4],y,{align:"right"});
+    y+=4;draw(C.line);doc.setLineWidth(.2);doc.line(M,y,R,y);y+=8;
+  });
+  const due=s.rows.filter(r=>!r.collector&&r.closing>0.004).reduce((t,r)=>t+r.closing,0);
+  doc.setFont("helvetica","bold");doc.setFontSize(11);col(C.ink);doc.text("Total to collect",cx[0],y);col(C.owe);doc.text(fmt(due)+" EGP",cx[4],y,{align:"right"});
+  y+=14;
+  const bl=billsList(s.bills);
+  if(bl.length){
+    doc.setFont("helvetica","bold");doc.setFontSize(8.5);col(C.muted);doc.text("BILLS THIS MONTH",M,y);y+=3;draw(C.ink);doc.setLineWidth(.4);doc.line(M,y,R,y);y+=7;
+    doc.setFontSize(10.5);
+    bl.forEach(([l,v])=>{if(y>H-24){footer();doc.addPage();y=header("Bills, continued")}
+      doc.setFont("helvetica","normal");col(C.ink);doc.text(T(l),M,y);doc.text(fmt(v),R,y,{align:"right"});y+=6.5;});
+  }
+  y+=4;doc.setFont("helvetica","italic");doc.setFontSize(9);col(C.muted);
+  doc.text("Each apartment's full breakdown is on the following pages.",M,Math.min(y,H-18));
+  footer();
+
+  /* one page per apartment */
+  s.rows.forEach(r=>{
+    doc.addPage();const st=statusOf(r);
+    let y=header(r.name);
+    doc.setFont("helvetica","normal");doc.setFontSize(9.5);col(C.muted);
+    if(r.meter&&!r.collector)doc.text("Meter "+T(r.meter),M,y-2);
+    doc.setFont("helvetica","bold");doc.setFontSize(9);col(C.muted);doc.text(T(st.tag).toUpperCase(),R,20,{align:"right"});
+    doc.setFontSize(22);col(statusColor(st));doc.text(r.collector?fmt(r.chargeTotal):st.amt,R,28,{align:"right"});
+    draw(statusColor(st));doc.setLineWidth(1);doc.line(M,y+1,R,y+1);y+=10;
+    const line=(label,val,detail,opt)=>{
+      opt=opt||{};
+      if(y>H-26){footer();doc.addPage();y=header(r.name+", continued")+4}
+      doc.setFont("helvetica",opt.bold?"bold":"normal");doc.setFontSize(opt.bold?12:10.5);col(C.ink);
+      const lab=doc.splitTextToSize(T(label),R-M-40);doc.text(lab,M,y);
+      col(opt.minus?C.credit:C.ink);doc.text(val,R,y,{align:"right"});y+=lab.length*5;
+      if(detail){doc.setFont("helvetica","normal");doc.setFontSize(8.5);col(C.muted);const d=doc.splitTextToSize(T(detail),R-M-40);doc.text(d,M,y);y+=d.length*4;}
+      y+=1.5;draw(C.line);doc.setLineWidth(.15);doc.setLineDashPattern([1,1],0);doc.line(M,y,R,y);doc.setLineDashPattern([],0);y+=5.5;
+    };
+    const sec=t=>{y+=2;doc.setFont("helvetica","bold");doc.setFontSize(8.5);col(C.muted);doc.text(t,M,y);y+=6;};
+    if(!r.collector&&r.opening)line(r.opening<0?"Credit brought forward":"Balance brought forward",r.opening<0?"-"+fmt(-r.opening):fmt(r.opening),"",{minus:r.opening<0});
+    sec("THIS MONTH");
+    if(!r.charges.length)line("No charges","0.00");
+    grouped(r).forEach(c=>line(c.label,fmt(c.amt),c.detail));
+    if(r.credits.length){sec("CREDITS AND PAYMENTS");r.credits.forEach(c=>line(c.label,"-"+fmt(c.amt),c.detail,{minus:true}));}
+    y+=1;draw(C.ink);doc.setLineWidth(.5);doc.line(M,y-5,R,y-5);y+=1;
+    if(!r.collector){
+      doc.setFont("helvetica","bold");doc.setFontSize(13);col(C.ink);doc.text(r.closing<-0.004?"Credit remaining":"Amount due",M,y);
+      col(statusColor(st));doc.text(fmt(Math.abs(r.closing))+" EGP",R,y,{align:"right"});
+      y+=7;doc.setFont("helvetica","normal");doc.setFontSize(9);col(C.muted);
+      const parts=[];if(r.opening)parts.push((r.opening<0?"credit ":"")+fmt(Math.abs(r.opening))+" brought forward");
+      parts.push(fmt(r.chargeTotal)+" this month");if(r.creditTotal+r.paidTotal)parts.push(fmt(r.creditTotal+r.paidTotal)+" credits and payments");
+      doc.text(T(parts.join("  ·  ")),M,y);
+    } else {doc.setFont("helvetica","bold");doc.setFontSize(13);col(C.ink);doc.text(T(r.name)+"'s own share",M,y);doc.text(fmt(r.chargeTotal)+" EGP",R,y,{align:"right"});}
+    footer();
+  });
+  return doc.output("blob");
+}
+
+/* ---------- editor ---------- */
+function aptOpts(sel,incNone){return (incNone?`<option value="">—</option>`:"")+cfg.apartments.map(a=>`<option value="${a.id}"${a.id===sel?" selected":""}>${esc(a.name)}</option>`).join("")}
+function numIn(id,val,path){return `<input type="number" step="0.01" inputmode="decimal" id="${id}" data-path="${path}" value="${val?r2(val):""}" placeholder="0.00">`}
+
+function renderTop(){
+  const tb=$("#topbar");
+  if(!isEditor||!cfg){tb.innerHTML="";return}
+  const ids=Object.keys(months).sort().reverse();
+  tb.innerHTML=`<select id="monthSel" aria-label="Month">${ids.map(i=>`<option value="${i}"${i===cur?" selected":""}>${monthLabel(i)}</option>`).join("")}</select>
+    ${view==="edit"?`<button id="newMonth">New month</button><button class="primary" data-view="stmt">Done</button>`:""}`;
+}
+
+function render(){
+  renderTop();
+  const app=$("#app");
+  if(!db){app.innerHTML=`<div class="notice">Sign in on claude.ai to open the building bills.</div>`;return}
+  if(!isEditor){app.innerHTML=`<div class="notice">This page is where the building bills are entered. Ask Emile for this month's statement.</div>`;return}
+  if(!cfg){app.innerHTML=`<div class="notice">Setting up…</div>`;return}
+  if(!cur||!months[cur]){app.innerHTML=`<div class="notice">No months yet. Use <b>New month</b> to start the first statement.</div>`;return}
+  const m=months[cur], A=cfg.apartments;
+  const s=compute(m,openingFor(cur));
+  if(view==="stmt"){
+    app.innerHTML=`<section class="panel">${stmtHTML(s,{editor:true,open:openApt})}</section>
+      <div class="bar"><button class="primary" id="dlHtml"${downloads?"":" hidden"}>Download PDF</button><button id="copyWa">Copy summary for WhatsApp</button></div>
+      <footer class="foot"><span>DKTIS building</span><button class="hush" data-view="edit" aria-label="Manage bills">⋯</button></footer>`;
+    return;
+  }
+  let h=``;
+  h+=`<section class="panel"><div class="panel-head"><h2>Electricity bills</h2><span class="muted" style="font-size:13px">Enter each bill total in EGP</span></div><div class="grid">
+    ${A.filter(a=>a.id!=="tamer").map(a=>`<div class="field"><label for="m_${a.id}"><b>${esc(a.name)}</b> · ${esc(a.meter)}</label>${numIn("m_"+a.id,m.meters[a.id],"meters."+a.id)}</div>`).join("")}
+    <div class="field"><label for="m_stairs"><b>Stairs meter</b> · 46000</label>${numIn("m_stairs",m.stairs,"stairs")}</div>
+    <div class="field"><label for="m_tamer"><b>Tamer</b> · own bill, only he pays</label>${numIn("m_tamer",m.tamerOwn,"tamerOwn")}</div>
+    <div class="field"><label for="m_other"><b>Other</b> · 49000</label>${numIn("m_other",m.other,"other")}</div>
+  </div></section>`;
+  h+=`<section class="panel"><div class="panel-head"><h2>Garage and car charging</h2><span class="muted" style="font-size:13px">Car charging is taken out of the garage bill; the rest is split ÷ ${A.length}</span></div><div class="grid">
+    <div class="field"><label for="m_garage"><b>Garage bill</b></label>${numIn("m_garage",m.garage,"garage")}</div>
+    <div class="field"><label for="ev_kozman"><b>Kozman</b> · electric car</label>${numIn("ev_kozman",(m.ev||{}).kozman,"ev.kozman")}</div>
+    <div class="field"><label for="ev_tawaf"><b>Tawaf</b> · electric car</label>${numIn("ev_tawaf",(m.ev||{}).tawaf,"ev.tawaf")}</div>
+  </div>${r2((m.ev||{}).kozman)+r2((m.ev||{}).tawaf)>r2(m.garage)&&r2(m.garage)?`<div class="pill warn">Car charging is more than the garage bill</div>`:""}</section>`;
+  h+=`<section class="panel"><div class="panel-head"><h2>Gas</h2><span class="muted" style="font-size:13px">100% to each apartment, nothing shared</span></div><div class="grid">
+    ${A.map(a=>`<div class="field"><label for="g_${a.id}"><b>${esc(a.name)}</b></label>${numIn("g_"+a.id,m.gas[a.id],"gas."+a.id)}</div>`).join("")}
+  </div></section>`;
+  h+=`<section class="panel"><div class="panel-head"><h2>Elevator service</h2><span class="muted" style="font-size:13px">Both split ÷ ${A.length}</span></div><div class="grid">
+    <div class="field"><label for="m_elev"><b>Monthly service fee</b></label>${numIn("m_elev",m.elevator,"elevator")}</div>
+    <div class="field"><label for="m_elevx"><b>Additional fee</b> (if any)</label>${numIn("m_elevx",m.elevatorExtra,"elevatorExtra")}</div>
+  </div></section>`;
+  h+=`<section class="panel"><div class="panel-head"><h2>Water</h2><span class="muted" style="font-size:13px">Split ÷ ${A.length}, shown as its own line</span></div><div class="grid">
+    <div class="field"><label for="m_water"><b>Water bill</b> (if any)</label>${numIn("m_water",m.water,"water")}</div>
+  </div></section>`;
+  h+=`<section class="panel"><div class="panel-head"><h2>Shared expenses</h2><button id="addExp">Add expense</button></div>
+    <p class="muted" style="margin:0;font-size:13px">Soap, bulbs, a mop, a repair. Residents see these as "Others" without the details. Split across all ${A.length} unless you pick fewer. If someone other than you paid, they get the full amount as credit.</p><div class="rows">`;
+  if(!(m.shared||[]).length) h+=`<div class="empty">No shared expenses this month.</div>`;
+  (m.shared||[]).forEach((x,i)=>{
+    const split=x.split&&x.split.length?x.split:A.map(a=>a.id);
+    h+=`<div class="row exp">
+      <input type="text" id="sl_${x.id}" data-arr="shared" data-i="${i}" data-k="label" value="${esc(x.label)}" placeholder="What was it?" aria-label="Expense">
+      <input type="number" step="0.01" id="sa_${x.id}" data-arr="shared" data-i="${i}" data-k="amount" value="${x.amount?r2(x.amount):""}" placeholder="0.00" aria-label="Amount">
+      <select id="sp_${x.id}" data-arr="shared" data-i="${i}" data-k="paidBy" aria-label="Paid by">${cfg.apartments.map(a=>`<option value="${a.id}"${a.id===(x.paidBy||cfg.collector)?" selected":""}>Paid by ${esc(a.name)}</option>`).join("")}</select>
+      <button class="ghost" data-del="shared" data-i="${i}" aria-label="Remove">Remove</button>
+      <div class="sub">Split:${A.map(a=>`<button class="chip${split.includes(a.id)?" on":""}" data-split="${i}" data-apt="${a.id}">${esc(a.name)}</button>`).join("")}
+      <label class="check"><input type="checkbox" id="pv_${x.id}" data-arr="shared" data-i="${i}" data-k="private"${x.private?" checked":""}> Combine into "Other building expenses" for residents</label></div></div>`;
+  });
+  h+=`</div></section>`;
+  h+=`<section class="panel"><div class="panel-head"><h2>Credits and payments</h2><button id="addAdj">Add entry</button></div>
+    <p class="muted" style="margin:0;font-size:13px">Money someone handed you (like Tamer's advances), something they paid for the building, or an extra charge. Unused credit carries to next month.</p><div class="rows">`;
+  if(!(m.adjustments||[]).length) h+=`<div class="empty">No credits or payments this month.</div>`;
+  (m.adjustments||[]).forEach((x,i)=>{
+    h+=`<div class="row adj">
+      <select id="aa_${x.id}" data-arr="adjustments" data-i="${i}" data-k="apt" aria-label="Apartment">${aptOpts(x.apt)}</select>
+      <select id="at_${x.id}" data-arr="adjustments" data-i="${i}" data-k="type" aria-label="Type">${Object.entries(ADJ_TYPES).map(([k,v])=>`<option value="${k}"${k===x.type?" selected":""}>${v}</option>`).join("")}</select>
+      <input type="number" step="0.01" id="am_${x.id}" data-arr="adjustments" data-i="${i}" data-k="amount" value="${x.amount?r2(x.amount):""}" placeholder="0.00" aria-label="Amount">
+      <input type="text" id="an_${x.id}" data-arr="adjustments" data-i="${i}" data-k="note" value="${esc(x.note)}" placeholder="Note residents will see" aria-label="Note">
+      <button class="ghost" data-del="adjustments" data-i="${i}" aria-label="Remove">Remove</button></div>`;
+  });
+  h+=`</div></section>`;
+  h+=`<section class="panel"><div class="field"><label for="note"><b>Note to residents</b> (optional)</label><textarea id="note" data-path="note" placeholder="e.g. Garage bill was higher this month because of the pump repair.">${esc(m.note)}</textarea></div></section>`;
+  h+=`<section class="panel" id="preview"><div class="panel-head"><h2>Totals so far</h2><button class="primary" data-view="stmt">Done, show statement</button></div><div id="liveCards">${cardsHTML(s)}</div>
+    <div class="bar"><button class="ghost" id="delMonth" style="margin-left:auto">Delete this month</button></div></section>`;
+  const pend=draftAt>remoteAt;
+  h+=`<section class="panel"><div class="panel-head"><h2>Upload to GitHub</h2><span id="syncPill" class="pill ${pend?"warn":"live"}">${pend?"Changes not uploaded yet":remoteOk?"Up to date with GitHub":"Not on GitHub yet"}</span></div>
+    <p class="muted" style="margin:0;font-size:13px">Your edits are kept in this browser until you upload them. When you're done: <b>Download data.json</b>, then on github.com open your repo → <b>Add file</b> → <b>Upload files</b> → drop it in → <b>Commit changes</b>. The family link shows the update within a couple of minutes.</p>
+    <div class="bar"><button class="primary" id="dlJson">Download data.json</button><button id="loadBackup">Load a data file</button><input type="file" id="loadFile" accept=".json,application/json" hidden><button class="ghost" id="discard" style="margin-left:auto">Discard my changes</button></div></section>`;
+  h+=settingsHTML();
+  app.innerHTML=h;
+}
+function settingsHTML(){
+  const A=cfg.apartments;
+  return `<section class="panel"><details class="settings" id="settings"><summary>Split rules and starting balances</summary><div class="rows">
+    <div class="grid">
+      <div class="field"><label for="el_def">Elevator default for new months</label><input type="number" step="0.01" id="el_def" data-cfg="elevatorDefault" value="${r2(cfg.elevatorDefault)}"></div>
+    </div>
+    <p class="muted" style="margin:0;font-size:13px">Tamer's own bill and the car charging are paid only by their owners. What's left of the stairs and garage bills is split ÷ ${A.length}.</p>
+    <label class="check" style="margin-left:0"><input type="checkbox" id="tin" data-cfg="tamerInStairs"${cfg.tamerInStairs!==false?" checked":""}> Tamer's bill is part of the stairs meter (take it out before splitting)</label>
+    <h3>Balances before the first month</h3>
+    <p class="muted" style="margin:0;font-size:13px">Negative means credit (they've paid ahead). Positive means they owe from before.</p>
+    <div class="grid">${A.filter(a=>a.id!==cfg.collector).map(a=>`<div class="field"><label for="op_${a.id}">${esc(a.name)}</label><input type="number" step="0.01" id="op_${a.id}" data-cfg="opening.${a.id}" value="${cfg.opening[a.id]?r2(cfg.opening[a.id]):""}" placeholder="0.00"></div>`).join("")}</div>
+    <h3>Apartment names and meters</h3>
+    <div class="grid">${A.map((a,i)=>`<div class="field"><label for="an${i}">Name</label><input type="text" id="an${i}" data-apt-i="${i}" data-k="name" value="${esc(a.name)}"><input type="text" id="am${i}" data-apt-i="${i}" data-k="meter" value="${esc(a.meter)}" aria-label="Meter"></div>`).join("")}</div>
+  </div></details></section>`;
+}
+
+/* ---------- state changes ---------- */
+function setPath(obj,path,val){const k=path.split(".");let o=obj;for(let i=0;i<k.length-1;i++){o[k[i]]=o[k[i]]||{};o=o[k[i]]}o[k[k.length-1]]=val}
+function refreshPreview(){
+  const lc=$("#liveCards"); if(!lc) return;
+  lc.innerHTML=cardsHTML(compute(months[cur],openingFor(cur)));
+}
+function touch(full){dirty=true;clearTimeout(saveTimer);saveTimer=setTimeout(saveMonth,600);if(full)render();else refreshPreview()}
+async function saveMonth(){
+  if(!cur||!months[cur]) return;
+  if(saving){saveTimer=setTimeout(saveMonth,400);return}
+  persist();dirty=false;
+}
+let cfgTimer=null;
+function touchCfg(full){clearTimeout(cfgTimer);cfgTimer=setTimeout(persist,400);if(full){const open=$("#settings")?.open;render();if(open)$("#settings").open=true}else refreshPreview()}
+
+document.addEventListener("input",e=>{
+  const t=e.target;
+  if(t.id==="monthSel"||t.id==="pubSel") return;
+  if(t.dataset.path){const v=t.type==="number"?r2(t.value):t.value;setPath(months[cur],t.dataset.path,v);touch(false)}
+  else if(t.dataset.arr){const it=months[cur][t.dataset.arr][+t.dataset.i];it[t.dataset.k]=t.type==="checkbox"?t.checked:t.type==="number"?r2(t.value):t.value;touch(false)}
+  else if(t.dataset.cfg){const v=t.type==="checkbox"?t.checked:t.type==="number"?r2(t.value):t.value;setPath(cfg,t.dataset.cfg,v);touchCfg(false)}
+  else if(t.dataset.aptI!==undefined){cfg.apartments[+t.dataset.aptI][t.dataset.k]=t.value;touchCfg(false)}
+});
+document.addEventListener("change",e=>{
+  const t=e.target;
+  if(t.id==="monthSel"){cur=t.value;render()}
+  else if(t.tagName==="SELECT"&&(t.dataset.arr||t.dataset.cfg)) {/* handled by input */}
+});
+document.addEventListener("click",async e=>{
+  const t=e.target.closest("button"); if(!t) return;
+  const m=months[cur];
+  if(t.dataset.view){view=t.dataset.view;openApt=null;render();window.scrollTo(0,0);return}
+  if(t.dataset.open){openApt=view==="stmt"?t.dataset.open:t.dataset.open;view="stmt";render();window.scrollTo(0,0);return}
+  if(t.dataset.back){openApt=null;render();return}
+  if(t.id==="newMonth"){
+    const ids=Object.keys(months).sort(); const now=new Date();
+    const id=ids.length?nextMonthId(ids[ids.length-1]):now.getFullYear()+"-"+String(now.getMonth()+1).padStart(2,"0");
+    months[id]=emptyMonth(id);cur=id;touch(true);toast(monthLabel(id)+" added");
+  }
+  else if(t.id==="addExp"){m.shared=m.shared||[];m.shared.push({id:uid(),label:"",amount:0,paidBy:cfg.collector,split:[],private:false});touch(true);setTimeout(()=>{const ins=document.querySelectorAll('[data-arr="shared"][data-k="label"]');ins[ins.length-1]?.focus()},0)}
+  else if(t.id==="addAdj"){m.adjustments=m.adjustments||[];m.adjustments.push({id:uid(),apt:"tamer",type:"payment",amount:0,note:""});touch(true)}
+  else if(t.dataset.del){m[t.dataset.del].splice(+t.dataset.i,1);touch(true)}
+  else if(t.dataset.split!==undefined){
+    const x=m.shared[+t.dataset.split];const all=cfg.apartments.map(a=>a.id);let sp=x.split&&x.split.length?[...x.split]:[...all];
+    sp=sp.includes(t.dataset.apt)?sp.filter(i=>i!==t.dataset.apt):[...sp,t.dataset.apt];
+    if(!sp.length){toast("Pick at least one apartment");return}
+    x.split=sp.length===all.length?[]:all.filter(i=>sp.includes(i));touch(true);
+  }
+  else if(t.dataset.paid){
+    e.preventDefault();
+    const a=cfg.apartments.find(x=>x.id===t.dataset.paid);
+    m.adjustments=m.adjustments||[];m.adjustments.push({id:uid(),apt:a.id,type:"payment",amount:r2(+t.dataset.amt),note:"Paid "+monthLabel(cur)});
+    touch(true);toast(a.name+" marked as paid");
+  }
+  else if(t.id==="delMonth"){
+    if(t.dataset.armed!=="1"){t.dataset.armed="1";t.textContent="Click again to delete "+monthLabel(cur);setTimeout(()=>{if(t.isConnected){t.dataset.armed="";t.textContent="Delete this month"}},4000);return}
+    const id=cur;
+    delete months[id];persist();cur=Object.keys(months).sort().reverse()[0]||null;render();toast(monthLabel(id)+" deleted");
+  }
+  else if(t.id==="copyWa"){
+    const txt=waText(compute(m,openingFor(cur)));
+    try{await navigator.clipboard.writeText(txt);toast("Copied. Paste it in the building group.")}
+    catch(err){const ta=document.createElement("textarea");ta.value=txt;ta.style.width="100%";t.closest(".panel").appendChild(ta);ta.select();toast("Select all and copy")}
+  }
+  else if(t.id==="dlHtml"){
+    const s=compute(m,openingFor(cur));
+    if(!window.jspdf){toast("PDF tool didn't load. Check your internet and reload.");return}
+    let blob;try{blob=pdfStatement(s)}catch(err){console.error(err);toast("Couldn't build the PDF");return}
+    try{await downloads.save({filename:"DKTIS-"+s.id+".pdf",data:blob})}catch(err){if(err.code!=="declined")toast("Download isn't available here")}
+  }
+  else if(t.id==="dlJson"){
+    const at=Date.now();draftAt=at;store(at);
+    await downloads.save({filename:"data.json",data:JSON.stringify({settings:cfg,months,savedAt:at},null,2)});
+    toast("data.json saved to Downloads. Now upload it to GitHub.");
+  }
+  else if(t.id==="discard"){
+    if(t.dataset.armed!=="1"){t.dataset.armed="1";t.textContent="Click again to discard";setTimeout(()=>{if(t.isConnected){t.dataset.armed="";t.textContent="Discard my changes"}},4000);return}
+    try{localStorage.removeItem(KEY)}catch(e){}location.reload();
+  }
+  else if(t.id==="loadBackup"){$("#loadFile").click()}
+});
+document.addEventListener("change",async e=>{
+  if(e.target.id!=="loadFile"||!e.target.files[0]) return;
+  try{
+    const d=JSON.parse(await e.target.files[0].text());
+    if(!d.settings||!d.months||!Array.isArray(d.settings.apartments)) throw 0;
+    cfg=d.settings;months=d.months;cur=Object.keys(months).sort().reverse()[0]||null;persist();render();toast("Backup loaded");
+  }catch(err){toast("That file isn't a DKTIS backup")}
+});
+
+/* ---------- boot ---------- */
+async function boot(){
+  let remote=null,draft=null;
+  try{const r=await fetch("data.json?t="+Date.now(),{cache:"no-store"});if(r.ok){remote=await r.json();remoteOk=true}}catch(e){}
+  try{draft=JSON.parse(localStorage.getItem(KEY)||"null")}catch(e){}
+  remoteAt=remote&&remote.savedAt||0;
+  if(draft&&draft.settings&&(!remote||(draft.savedAt||0)>remoteAt)){cfg=draft.settings;months=draft.months||{};draftAt=draft.savedAt||0}
+  else if(remote&&remote.settings){cfg=remote.settings;months=remote.months||{};draftAt=remoteAt;store(remoteAt)}
+  else{
+    cfg=JSON.parse(JSON.stringify(DEFAULT_CFG));
+    cfg.opening={nathalie:-1467.02,tamer:-1750};
+    months={"2026-11":emptyMonth("2026-11")};
+  }
+  cfg.opening=cfg.opening||{};
+  cur=Object.keys(months).sort().reverse()[0]||null;
+  render();
+}
+boot();
+})();
+</script>
+</body></html>

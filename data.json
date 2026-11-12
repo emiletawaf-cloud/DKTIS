@@ -1,0 +1,69 @@
+{
+  "settings": {
+    "apartments": [
+      {
+        "id": "kozman",
+        "name": "Kozman",
+        "meter": "47500"
+      },
+      {
+        "id": "tawaf",
+        "name": "Tawaf",
+        "meter": "47000"
+      },
+      {
+        "id": "nathalie",
+        "name": "Nathalie",
+        "meter": "48500"
+      },
+      {
+        "id": "fadi",
+        "name": "Fadi",
+        "meter": "48000"
+      },
+      {
+        "id": "tamer",
+        "name": "Tamer",
+        "meter": "46000 · stairs"
+      }
+    ],
+    "collector": "tawaf",
+    "tamerInStairs": true,
+    "elevatorDefault": 550,
+    "opening": {
+      "nathalie": -1467.02,
+      "tamer": -1750
+    },
+    "openingNote": "Balance as of 8 Nov 2026"
+  },
+  "months": {
+    "2026-11": {
+      "adjustments": [],
+      "elevator": 550,
+      "ev": {
+        "kozman": 0,
+        "tawaf": 600
+      },
+      "garage": 2500,
+      "gas": {
+        "kozman": 35,
+        "nathalie": 35,
+        "tamer": 35,
+        "tawaf": 35
+      },
+      "id": "2026-11",
+      "meters": {
+        "fadi": 2124,
+        "kozman": 3734,
+        "nathalie": 726,
+        "tawaf": 3024
+      },
+      "note": "",
+      "other": 30,
+      "shared": [],
+      "stairs": 0,
+      "tamerOwn": 2000
+    }
+  },
+  "savedAt": 1794483061372
+}
