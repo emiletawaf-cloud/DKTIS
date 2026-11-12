@@ -41,7 +41,7 @@
           "apt": "kozman",
           "type": "credit",
           "amount": 500,
-          "note": "Paid on behalf of the building"
+          "note": "Sandra paid for Garage"
         }
       ],
       "elevator": 550,
@@ -864,5 +864,5 @@
       "elevator": 0
     }
   },
-  "savedAt": 1794489089918
+  "savedAt": 1794489236165
 }
