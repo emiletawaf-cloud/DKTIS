@@ -61,7 +61,7 @@
           "id": "jk0hyml",
           "apt": "tamer",
           "type": "payment",
-          "amount": 1128.61,
+          "amount": 10000,
           "note": "Paid November 2026"
         }
       ],
@@ -885,5 +885,5 @@
       "elevator": 0
     }
   },
-  "savedAt": 1794492746257
+  "savedAt": 1794492769137
 }
