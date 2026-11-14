@@ -890,7 +890,19 @@
       "gas": {},
       "shared": [],
       "elevator": 0
+    },
+    "2026-12": {
+      "id": "2026-12",
+      "meters": {},
+      "gas": {},
+      "other": 0,
+      "stairs": 0,
+      "garage": 0,
+      "elevator": 550,
+      "shared": [],
+      "adjustments": [],
+      "note": ""
     }
   },
-  "savedAt": 1794647757946
+  "savedAt": 1794647807766
 }
