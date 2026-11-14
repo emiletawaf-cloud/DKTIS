@@ -31,10 +31,21 @@
     "tamerInStairs": true,
     "elevatorDefault": 550,
     "opening": {},
-    "openingNote": "Balances start at zero in January 2026"
+    "openingNote": "Balances start at zero in January 2026",
+    "monthShift": -1,
+    "recurring": [
+      {
+        "id": "fadi-monthly",
+        "apt": "fadi",
+        "type": "credit",
+        "amount": 550,
+        "note": "Monthly credit",
+        "from": "2026-10"
+      }
+    ]
   },
   "months": {
-    "2026-11": {
+    "2026-10": {
       "adjustments": [
         {
           "id": "nov-koz",
@@ -48,28 +59,28 @@
           "apt": "nathalie",
           "type": "payment",
           "amount": 137.98,
-          "note": "Paid November 2026"
+          "note": "Paid October 2026"
         },
         {
           "id": "kowjoxb",
           "apt": "kozman",
           "type": "payment",
           "amount": 4113,
-          "note": "Paid November 2026"
+          "note": "Paid October 2026"
         },
         {
           "id": "jk0hyml",
           "apt": "tamer",
           "type": "payment",
           "amount": 10000,
-          "note": "Paid November 2026"
+          "note": "Paid October 2026"
         },
         {
           "id": "yn201ji",
           "apt": "fadi",
           "type": "payment",
           "amount": 3003,
-          "note": "Paid November 2026"
+          "note": "Paid October 2026"
         }
       ],
       "elevator": 550,
@@ -85,7 +96,7 @@
         "fadi": 35,
         "tamer": 35
       },
-      "id": "2026-11",
+      "id": "2026-10",
       "meters": {
         "fadi": 2124,
         "kozman": 3734,
@@ -113,8 +124,8 @@
         "tamer": -1750.388
       }
     },
-    "2026-01": {
-      "id": "2026-01",
+    "2025-12": {
+      "id": "2025-12",
       "legacy": {
         "n": 4,
         "items": [
@@ -165,7 +176,7 @@
           "apt": "nathalie",
           "type": "payment",
           "amount": 200,
-          "note": "Paid January"
+          "note": "Paid December"
         },
         {
           "id": "x2026-01fadi",
@@ -181,8 +192,8 @@
       "shared": [],
       "elevator": 0
     },
-    "2026-02": {
-      "id": "2026-02",
+    "2026-01": {
+      "id": "2026-01",
       "legacy": {
         "n": 4,
         "items": [
@@ -233,7 +244,7 @@
           "apt": "nathalie",
           "type": "payment",
           "amount": 853.25,
-          "note": "Paid February"
+          "note": "Paid January"
         },
         {
           "id": "x2026-02fadi",
@@ -247,7 +258,7 @@
           "apt": "fadi",
           "type": "payment",
           "amount": 678.25,
-          "note": "Paid February"
+          "note": "Paid January"
         }
       ],
       "note": "",
@@ -256,8 +267,8 @@
       "shared": [],
       "elevator": 0
     },
-    "2026-03": {
-      "id": "2026-03",
+    "2026-02": {
+      "id": "2026-02",
       "legacy": {
         "n": 4,
         "items": [
@@ -301,14 +312,14 @@
           "apt": "kozman",
           "type": "payment",
           "amount": 1863.5,
-          "note": "Paid March"
+          "note": "Paid February"
         },
         {
           "id": "p2026-03nathalie",
           "apt": "nathalie",
           "type": "payment",
           "amount": 1178.25,
-          "note": "Paid March"
+          "note": "Paid February"
         },
         {
           "id": "x2026-03fadi",
@@ -322,7 +333,7 @@
           "apt": "fadi",
           "type": "payment",
           "amount": 1003.25,
-          "note": "Paid March"
+          "note": "Paid February"
         }
       ],
       "note": "",
@@ -331,8 +342,8 @@
       "shared": [],
       "elevator": 0
     },
-    "2026-04": {
-      "id": "2026-04",
+    "2026-03": {
+      "id": "2026-03",
       "legacy": {
         "n": 4,
         "items": [
@@ -383,14 +394,14 @@
           "apt": "kozman",
           "type": "payment",
           "amount": 2587.5,
-          "note": "Paid April"
+          "note": "Paid March"
         },
         {
           "id": "p2026-04nathalie",
           "apt": "nathalie",
           "type": "payment",
           "amount": 1401.5,
-          "note": "Paid April"
+          "note": "Paid March"
         },
         {
           "id": "x2026-04fadi",
@@ -404,7 +415,7 @@
           "apt": "fadi",
           "type": "payment",
           "amount": 1421.5,
-          "note": "Paid April"
+          "note": "Paid March"
         }
       ],
       "note": "",
@@ -413,8 +424,8 @@
       "shared": [],
       "elevator": 0
     },
-    "2026-05": {
-      "id": "2026-05",
+    "2026-04": {
+      "id": "2026-04",
       "legacy": {
         "n": 5,
         "items": [
@@ -468,14 +479,14 @@
           "apt": "kozman",
           "type": "payment",
           "amount": 2780.062,
-          "note": "Paid May"
+          "note": "Paid April"
         },
         {
           "id": "p2026-05nathalie",
           "apt": "nathalie",
           "type": "payment",
           "amount": 1917.062,
-          "note": "Paid May"
+          "note": "Paid April"
         },
         {
           "id": "x2026-05fadi",
@@ -489,7 +500,7 @@
           "apt": "fadi",
           "type": "payment",
           "amount": 1690.062,
-          "note": "Paid May"
+          "note": "Paid April"
         },
         {
           "id": "x2026-05tamer",
@@ -505,8 +516,8 @@
       "shared": [],
       "elevator": 0
     },
-    "2026-06": {
-      "id": "2026-06",
+    "2026-05": {
+      "id": "2026-05",
       "legacy": {
         "n": 5,
         "items": [
@@ -567,14 +578,14 @@
           "apt": "kozman",
           "type": "payment",
           "amount": 839.8,
-          "note": "Paid June"
+          "note": "Paid May"
         },
         {
           "id": "p2026-06nathalie",
           "apt": "nathalie",
           "type": "payment",
           "amount": 883.8,
-          "note": "Paid June"
+          "note": "Paid May"
         },
         {
           "id": "x2026-06fadi",
@@ -590,8 +601,8 @@
       "shared": [],
       "elevator": 0
     },
-    "2026-07": {
-      "id": "2026-07",
+    "2026-06": {
+      "id": "2026-06",
       "legacy": {
         "n": 5,
         "items": [
@@ -640,14 +651,14 @@
           "apt": "kozman",
           "type": "payment",
           "amount": 3597.25,
-          "note": "Paid July"
+          "note": "Paid June"
         },
         {
           "id": "p2026-07nathalie",
           "apt": "nathalie",
           "type": "payment",
           "amount": 956.25,
-          "note": "Paid July"
+          "note": "Paid June"
         },
         {
           "id": "x2026-07fadi",
@@ -661,7 +672,7 @@
           "apt": "fadi",
           "type": "payment",
           "amount": 1593.25,
-          "note": "Paid July"
+          "note": "Paid June"
         }
       ],
       "note": "",
@@ -670,8 +681,8 @@
       "shared": [],
       "elevator": 0
     },
-    "2026-08": {
-      "id": "2026-08",
+    "2026-07": {
+      "id": "2026-07",
       "legacy": {
         "n": 5,
         "items": [
@@ -720,7 +731,7 @@
           "apt": "kozman",
           "type": "payment",
           "amount": 4437.8,
-          "note": "Paid August"
+          "note": "Paid July"
         },
         {
           "id": "x2026-08nathalie",
@@ -734,7 +745,7 @@
           "apt": "nathalie",
           "type": "payment",
           "amount": 520.8,
-          "note": "Paid August"
+          "note": "Paid July"
         },
         {
           "id": "x2026-08fadi",
@@ -750,8 +761,8 @@
       "shared": [],
       "elevator": 0
     },
-    "2026-09": {
-      "id": "2026-09",
+    "2026-08": {
+      "id": "2026-08",
       "legacy": {
         "n": 5,
         "items": [
@@ -795,14 +806,14 @@
           "apt": "kozman",
           "type": "payment",
           "amount": 986.2,
-          "note": "Paid September"
+          "note": "Paid August"
         },
         {
           "id": "p2026-09nathalie",
           "apt": "nathalie",
           "type": "payment",
           "amount": 2065.2,
-          "note": "Paid September"
+          "note": "Paid August"
         },
         {
           "id": "x2026-09fadi",
@@ -818,8 +829,8 @@
       "shared": [],
       "elevator": 0
     },
-    "2026-10": {
-      "id": "2026-10",
+    "2026-09": {
+      "id": "2026-09",
       "legacy": {
         "n": 5,
         "items": [
@@ -868,7 +879,7 @@
           "apt": "kozman",
           "type": "payment",
           "amount": 3651.6,
-          "note": "Paid October"
+          "note": "Paid September"
         },
         {
           "id": "x2026-10nathalie",
@@ -882,7 +893,7 @@
           "apt": "fadi",
           "type": "payment",
           "amount": 2327.85,
-          "note": "Paid October"
+          "note": "Paid September"
         }
       ],
       "note": "",
@@ -891,8 +902,8 @@
       "shared": [],
       "elevator": 0
     },
-    "2026-12": {
-      "id": "2026-12",
+    "2026-11": {
+      "id": "2026-11",
       "meters": {},
       "gas": {},
       "other": 0,
@@ -901,8 +912,11 @@
       "elevator": 550,
       "shared": [],
       "adjustments": [],
-      "note": ""
+      "note": "",
+      "skipRec": [
+        "fadi-monthly"
+      ]
     }
   },
-  "savedAt": 1794647807766
+  "savedAt": 1794649516352
 }
