@@ -917,12 +917,17 @@
         "fadi-monthly"
       ],
       "ev": {
-        "tawaf": 140
+        "tawaf": 0
       },
       "evItems": {
         "tawaf": [
           {
             "id": "dcz1kn7",
+            "note": "1",
+            "amount": 140
+          },
+          {
+            "id": "umkb8gi",
             "note": "",
             "amount": 0
           }
@@ -930,5 +935,5 @@
       }
     }
   },
-  "savedAt": 1794837530715
+  "savedAt": 1794839175362
 }
