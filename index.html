@@ -286,6 +286,10 @@ a.btn.primary{background:var(--accent);color:var(--accent-ink);border-color:var(
 .hist{padding-bottom:16px}
 a.btn.wa{background:#25D366;border-color:#25D366;color:#06301A}
 @media (prefers-reduced-motion:reduce){.rain,.cat,.props .cloth,.props .p2,.fanous,.lights i,.charger .scr,.evcar .bolt,.batt i{animation:none}}
+.evgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px}
+.evbox{border:1px solid var(--line);border-radius:var(--r);padding:12px;display:flex;flex-direction:column;gap:10px;background:var(--surface)}
+.evtot{font-family:var(--f-mono);font-weight:600;color:var(--accent)}
+.evrow{display:grid;grid-template-columns:1fr 110px auto;gap:6px;align-items:center}
 .hint{text-align:center;color:var(--muted);font-size:13.5px;margin:10px 0 0}
 .ach.static{cursor:default}.ach.static:hover{background:transparent}
 .xclose{all:unset;cursor:pointer;font-size:22px;line-height:1;color:var(--muted);padding:2px 6px;border-radius:6px}
@@ -425,10 +429,12 @@ let dirty=false,saving=false,saveTimer=null,lastSaved="";
 /* ---------- calculation ---------- */
 function emptyMonth(id){return {id,meters:{},gas:{},other:0,stairs:0,garage:0,elevator:cfg?cfg.elevatorDefault:550,shared:[],adjustments:[],note:""}}
 
+function evItemsOf(m,id){return ((m.evItems||{})[id]||[])}
+function evTotalOf(m,id){return r2(r2((m.ev||{})[id])+evItemsOf(m,id).reduce((t,x)=>t+r2(x.amount),0))}
 function compute(m,opening){
   const A=cfg.apartments, n=A.length, col=cfg.collector;
   const S=r2(m.stairs), G=r2(m.garage), O=r2(m.other), E=r2(m.elevator), EX=r2(m.elevatorExtra);
-  const T=r2(m.tamerOwn), ev=m.ev||{}, evK=r2(ev.kozman), evT=r2(ev.tawaf), evTot=r2(evK+evT);
+  const T=r2(m.tamerOwn), evK=evTotalOf(m,"kozman"), evT=evTotalOf(m,"tawaf"), evTot=r2(evK+evT);
   const tIn=cfg.tamerInStairs!==false;
   const sRest=r2(Math.max(0,S-(tIn?T:0))), gRest=r2(Math.max(0,G-evTot));
   const per={};
@@ -450,7 +456,9 @@ function compute(m,opening){
   if(T&&per.tamer) add("tamer","Own electricity",T,tIn&&S?"Paid by Tamer only; taken out of the "+fmt(S)+" stairs meter bill":"Paid by Tamer only","elec","your own bill");
   if(sRest) A.forEach(a=>add(a.id,"Stairs meter, 1/"+n,sRest/n,(tIn&&T?fmt(S)+" − "+fmt(T)+" Tamer = "+fmt(sRest):fmt(sRest))+" ÷ "+n,"elec","stairs share"));
   [["kozman",evK],["tawaf",evT]].forEach(([id,v])=>{if(per[id])per[id].charges.push({label:"Electric car charging",amt:r2(v),cat:"ev",short:"car charging",
-    detail:v?"Taken out of the "+fmt(G)+" garage bill":"No car charging this month"})});
+    detail:!v?"No car charging this month":(()=>{const it=evItemsOf(m,id).filter(x=>r2(x.amount)),lump=r2((m.ev||{})[id]);
+      const parts=[];if(lump)parts.push(fmt(lump)+(it.length?" lump sum":""));it.forEach(x=>parts.push((x.note?x.note+" ":"")+fmt(x.amount)));
+      return (parts.length>1?parts.join(" + ")+" = "+fmt(v)+" · ":"")+"Taken out of the "+fmt(G)+" garage bill"})()})});
   if(gRest) A.forEach(a=>add(a.id,"Garage meter, 1/"+n,gRest/n,(evTot?fmt(G)+" − "+fmt(evTot)+" car charging = "+fmt(gRest):fmt(gRest))+" ÷ "+n,"elec","garage share"));
   if(O) A.forEach(a=>add(a.id,"Other meter (49000), 1/"+n,O/n,fmt(O)+" ÷ "+n,"elec","other meter share"));
   if(E) A.forEach(a=>add(a.id,"Elevator service, 1/"+n,E/n,fmt(E)+" ÷ "+n,"elev","service"));
@@ -787,9 +795,13 @@ function render(){
   </div></section>`;
   h+=`<section class="panel"><div class="panel-head"><h2>Garage and car charging</h2><span class="muted" style="font-size:13px">Car charging is taken out of the garage bill; the rest is split ÷ ${A.length}</span></div><div class="grid">
     <div class="field"><label for="m_garage"><b>Garage bill</b></label>${numIn("m_garage",m.garage,"garage")}</div>
-    <div class="field"><label for="ev_kozman"><b>Kozman</b> · electric car</label>${numIn("ev_kozman",(m.ev||{}).kozman,"ev.kozman")}</div>
-    <div class="field"><label for="ev_tawaf"><b>Tawaf</b> · electric car</label>${numIn("ev_tawaf",(m.ev||{}).tawaf,"ev.tawaf")}</div>
-  </div>${r2((m.ev||{}).kozman)+r2((m.ev||{}).tawaf)>r2(m.garage)&&r2(m.garage)?`<div class="pill warn">Car charging is more than the garage bill</div>`:""}</section>`;
+  </div>
+  <div class="evgrid">${["kozman","tawaf"].filter(id=>A.some(a=>a.id===id)).map(id=>{const a=A.find(q=>q.id===id);return `<div class="evbox">
+    <div class="panel-head"><h3>${esc(a.name)} · electric car</h3><span class="evtot" id="evtot_${id}">Total ${fmt(evTotalOf(m,id))}</span></div>
+    <div class="field"><label for="ev_${id}">Lump sum (optional)</label>${numIn("ev_"+id,(m.ev||{})[id],"ev."+id)}</div>
+    <div class="rows">${evItemsOf(m,id).map((x,i)=>`<div class="evrow"><input type="text" id="evn_${id}_${i}" data-ev-apt="${id}" data-ev-i="${i}" data-k="note" value="${esc(x.note||"")}" placeholder="e.g. 3 Nov" aria-label="Charge note"><input type="number" step="0.01" inputmode="decimal" id="eva_${id}_${i}" data-ev-apt="${id}" data-ev-i="${i}" data-k="amount" value="${x.amount?r2(x.amount):""}" placeholder="0.00" aria-label="Charge amount"><button class="ghost" data-delev="${id}:${i}" aria-label="Remove charge">Remove</button></div>`).join("")}</div>
+    <div class="bar"><button data-addev="${id}">Add a charge</button></div></div>`}).join("")}</div>
+  ${evTotalOf(m,"kozman")+evTotalOf(m,"tawaf")>r2(m.garage)&&r2(m.garage)?`<div class="pill warn">Car charging is more than the garage bill</div>`:""}</section>`;
   h+=`<section class="panel"><div class="panel-head"><h2>Gas</h2><span class="muted" style="font-size:13px">100% to each apartment, nothing shared</span></div><div class="grid">
     ${A.map(a=>`<div class="field"><label for="g_${a.id}"><b>${esc(a.name)}</b></label>${numIn("g_"+a.id,m.gas[a.id],"gas."+a.id)}</div>`).join("")}
   </div></section>`;
@@ -894,7 +906,10 @@ function touchCfg(full){clearTimeout(cfgTimer);cfgTimer=setTimeout(persist,400);
 document.addEventListener("input",e=>{
   const t=e.target;
   if(t.id==="monthSel"||t.id==="pubSel") return;
-  if(t.dataset.path){const v=t.type==="number"?r2(t.value):t.value;setPath(months[cur],t.dataset.path,v);touch(false)}
+  if(t.dataset.path){const v=t.type==="number"?r2(t.value):t.value;setPath(months[cur],t.dataset.path,v);
+    if(t.dataset.path.startsWith("ev.")){const id=t.dataset.path.slice(3),el=document.getElementById("evtot_"+id);if(el)el.textContent="Total "+fmt(evTotalOf(months[cur],id))}touch(false)}
+  else if(t.dataset.evApt){const mm=months[cur];mm.evItems=mm.evItems||{};const it=mm.evItems[t.dataset.evApt][+t.dataset.evI];it[t.dataset.k]=t.dataset.k==="amount"?r2(t.value):t.value;
+    const el=document.getElementById("evtot_"+t.dataset.evApt);if(el)el.textContent="Total "+fmt(evTotalOf(mm,t.dataset.evApt));touch(false)}
   else if(t.dataset.arr){const it=months[cur][t.dataset.arr][+t.dataset.i];it[t.dataset.k]=t.type==="checkbox"?t.checked:t.type==="number"?r2(t.value):t.value;touch(false)}
   else if(t.dataset.cfg){const v=t.type==="checkbox"?t.checked:t.type==="number"?r2(t.value):t.value;setPath(cfg,t.dataset.cfg,v);touchCfg(false)}
   else if(t.dataset.aptI!==undefined){cfg.apartments[+t.dataset.aptI][t.dataset.k]=t.value;touchCfg(false)}
@@ -933,6 +948,9 @@ document.addEventListener("click",async e=>{
     months[id]=emptyMonth(id);cur=id;touch(true);toast(monthLabel(id)+" added");
   }
   else if(t.id==="addExp"){m.shared=m.shared||[];m.shared.push({id:uid(),label:"",amount:0,paidBy:cfg.collector,split:[],private:false});touch(true);setTimeout(()=>{const ins=document.querySelectorAll('[data-arr="shared"][data-k="label"]');ins[ins.length-1]?.focus()},0)}
+  else if(t.dataset.addev){const id=t.dataset.addev;m.evItems=m.evItems||{};(m.evItems[id]=m.evItems[id]||[]).push({id:uid(),note:"",amount:0});touch(true);
+    setTimeout(()=>{const ins=document.querySelectorAll('[data-ev-apt="'+id+'"][data-k="amount"]');ins[ins.length-1]?.focus()},0)}
+  else if(t.dataset.delev){const [id,i]=t.dataset.delev.split(":");m.evItems[id].splice(+i,1);touch(true)}
   else if(t.id==="addAdj"){m.adjustments=m.adjustments||[];m.adjustments.push({id:uid(),apt:"tamer",type:"payment",amount:0,note:""});touch(true)}
   else if(t.dataset.del){m[t.dataset.del].splice(+t.dataset.i,1);touch(true)}
   else if(t.dataset.split!==undefined){
