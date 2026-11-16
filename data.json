@@ -915,8 +915,20 @@
       "note": "",
       "skipRec": [
         "fadi-monthly"
-      ]
+      ],
+      "ev": {
+        "tawaf": 140
+      },
+      "evItems": {
+        "tawaf": [
+          {
+            "id": "dcz1kn7",
+            "note": "",
+            "amount": 0
+          }
+        ]
+      }
     }
   },
-  "savedAt": 1794649516352
+  "savedAt": 1794837530715
 }
