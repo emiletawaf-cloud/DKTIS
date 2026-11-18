@@ -910,7 +910,24 @@
       "stairs": 0,
       "garage": 0,
       "elevator": 550,
-      "shared": [],
+      "shared": [
+        {
+          "id": "eeninax",
+          "label": "Malak ambouba",
+          "amount": 400,
+          "paidBy": "tawaf",
+          "split": [],
+          "private": false
+        },
+        {
+          "id": "49lt7o3",
+          "label": "",
+          "amount": 0,
+          "paidBy": "tawaf",
+          "split": [],
+          "private": false
+        }
+      ],
       "adjustments": [],
       "note": "",
       "skipRec": [
@@ -935,5 +952,5 @@
       }
     }
   },
-  "savedAt": 1794839175362
+  "savedAt": 1794986841189
 }
