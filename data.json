@@ -934,7 +934,8 @@
         "fadi-monthly"
       ],
       "ev": {
-        "tawaf": 0
+        "tawaf": 0,
+        "kozman": 100
       },
       "evItems": {
         "tawaf": [
@@ -952,5 +953,5 @@
       }
     }
   },
-  "savedAt": 1794986841189
+  "savedAt": 1795017232973
 }
